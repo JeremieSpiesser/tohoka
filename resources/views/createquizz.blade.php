@@ -12,10 +12,13 @@
 
          <div id="app">
                 <h1>New Quizz  : @{{ quizz.getTitle() }} </h1>
-                <button @click="quizz.addItem()"> Add item </button>
+                <input type="textbox" v-model="quizz.title"></input>
                 <ul>
                     <li v-for="item in quizz.items">
                         <h3>@{{ item.getQuestion() }} </h3>
+                        <input type="textbox" v-model="item.question"></input>
+
+
                         <ul v-for="(possAnswer,index) in item.getAnswers()">
                             <li>  @{{ index }} : @{{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer"> </input>
                             <input type="checkbox" v-model="possAnswer.bool">Correct answer ? </input>
@@ -23,8 +26,9 @@
                     <button @click="item.addPossibleAnswer()"> Add an answer </button>
                     </li>
                 </ul>
-                <button @click="quizz.toJson()" >Export to JSON </button>
-                <p> @{{ quizz.exporter }}</p>
+                <button @click="quizz.addItem()"> Add item </button>
+                <button @click="populateJson()" >Export to JSON </button>
+                <p> @{{ jsonExport }}</p>
          </div>
 
     </body>

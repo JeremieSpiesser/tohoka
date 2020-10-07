@@ -2,7 +2,6 @@ class InputQuizz{
     constructor(title) {
         this.title = title;
         this.items = [];
-        this.exporter = "";
     }
     addItem(){
         console.log("Items : ");
@@ -27,9 +26,7 @@ class InputQuizz{
         return this.title;
     }
     toJson(){
-        this.exporter = "";
-        this.exporter = (JSON.stringify(this));
-        return this.exporter
+        return JSON.stringify(this);
     }
 
 }
@@ -62,9 +59,13 @@ class InputQuizzItem{
 var app = new Vue({
     el: '#app',
     data: {
-        quizz: new InputQuizz("sample quizz")
+        quizz: new InputQuizz("sample quizz"),
+        jsonExport: ""
     },
     methods: {
+        populateJson(){
+            this.jsonExport = this.quizz.toJson();
+        }
 
     }
 })

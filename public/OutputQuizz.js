@@ -2,7 +2,6 @@ class OutputQuizz{
     constructor(title) {
         this.title = title;
         this.items = [];
-        this.exporter = "";
     }
     getTitle(){
         return this.title;
