@@ -4,7 +4,6 @@ class InputQuizz{
         this.items = [];
     }
     addItem(){
-        console.log("Ajout d'un item");
         this.items.push(new InputQuizzItem("Sample question", ["answer1", "answer2"],[1]));
     }
     removeItemAt(i){
@@ -24,9 +23,9 @@ class InputQuizz{
 
 class InputQuizzItem{
     //question : the question (string)
-    // questions : a list of strings with all the questions
+    // questions : a list of (strings,bool) with all the questions (bool true if correct, false if not)
     //correctAnswers : a list of indexes (starting from 0 to n-1) with the correct answers in questions
-    constructor(question,possibleAnswers,correctAnswers){
+    constructor(question,possibleAnswers, correctAnswers){
         if (correctAnswers.map((index) => ((0 <= index) && (index < possibleAnswers.length))).reduce((a,b) => a && b)) {
             this.question = question;
             this.possibleAnswers = possibleAnswers;
@@ -48,6 +47,9 @@ class InputQuizzItem{
     getPossibleAnswers(){
         return this.possibleAnswers
     }
+    printPossibleAnswers(){
+        return this.possibleAnswers.map((i)=>(i,this.possibleAnswers[i]))
+    }
     addCorrectAnswer(i){
         if ((0 <= i) && (i< this.possibleAnswers.length))
             this.correctAnswers.push(i)
@@ -62,6 +64,11 @@ class InputQuizzItem{
     }
     addPossibleAnswer(answer="another one"){
         this.possibleAnswers.push(answer)
+    }
+    changeAnswer(i,text) {
+        if ((0 <= i) && (i < this.possibleAnswers.length)) {
+            this.possibleAnswers[i] = text;
+        }
     }
 
 }

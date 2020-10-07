@@ -16,11 +16,11 @@
                 <ul>
                     <li v-for="item in quizz.items">
                         <h3>@{{ item.getQuestion() }} </h3>
-                        <ol v-for="possAnswer in item.getPossibleAnswers()">
-                            <li> @{{ possAnswer }} </li>
+                        <ul v-for="(possAnswer,index) in item.getPossibleAnswers()">
+                            <li>  @{{ index }} : @{{ possAnswer }} </li>
+                            <input type="text" v-model="item.possibleAnswers[index]"> </input>
 
-
-                        </ol>
+                        </ul>
                     <button @click="item.addPossibleAnswer()"> </button>
 
                     </li>
