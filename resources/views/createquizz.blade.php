@@ -8,7 +8,7 @@
     </head>
     <body class="antialiased">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="{{ URL::asset('Quizz.js') }}" defer></script>
+        <script src="{{ URL::asset('InputQuizz.js') }}" defer></script>
 
          <div id="app">
                 <h1>New Quizz  : @{{ quizz.getTitle() }} </h1>
