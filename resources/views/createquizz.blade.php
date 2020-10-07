@@ -16,18 +16,14 @@
                 <ul>
                     <li v-for="item in quizz.items">
                         <h3>@{{ item.getQuestion() }} </h3>
-                        <ul v-for="(possAnswer,index) in item.getPossibleAnswers()">
-                            <li>  @{{ index }} : @{{ possAnswer }} </li>
-                            <input type="text" v-model="item.possibleAnswers[index]"> </input>
-
+                        <ul v-for="(possAnswer,index) in item.getAnswers()">
+                            <li>  @{{ index }} : @{{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer"> </input>
+                            <input type="checkbox" v-model="possAnswer.bool">Correct answer ? </input>
                         </ul>
-                    <button @click="item.addPossibleAnswer()"> </button>
-
+                    <button @click="item.addPossibleAnswer()"> Add an answer </button>
                     </li>
-
-
                 </ul>
-
+                <button @click="quizz.toJson()" >Export to JSON </button>
          </div>
 
     </body>

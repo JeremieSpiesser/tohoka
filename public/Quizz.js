@@ -4,7 +4,17 @@ class InputQuizz{
         this.items = [];
     }
     addItem(){
-        this.items.push(new InputQuizzItem("Sample question", ["answer1", "answer2"],[1]));
+        console.log("Items : ");
+        console.log(this.items);
+        this.items.push(new InputQuizzItem("Sample question", [
+            {
+                answer: "Number one",
+                bool: true
+            },
+            {
+                answer: "Number two",
+                bool: false
+            }]));
     }
     removeItemAt(i){
         let u = this.items.indexOf(i);
@@ -16,61 +26,33 @@ class InputQuizz{
         return this.title;
     }
     toJson(){
-        return JSON.stringify(this);
+        console.log(JSON.stringify(this));
     }
 
 }
 
 class InputQuizzItem{
     //question : the question (string)
-    // questions : a list of (strings,bool) with all the questions (bool true if correct, false if not)
-    //correctAnswers : a list of indexes (starting from 0 to n-1) with the correct answers in questions
-    constructor(question,possibleAnswers, correctAnswers){
-        if (correctAnswers.map((index) => ((0 <= index) && (index < possibleAnswers.length))).reduce((a,b) => a && b)) {
-            this.question = question;
-            this.possibleAnswers = possibleAnswers;
-            this.correctAnswers = correctAnswers;
-        }else{
-            return null;
-        }
+    // questions : a list of {answer: str, correct: bool }  with all the questions (bool true if correct, false if not)
+    constructor(question,answers) {
+        this.question = question;
+        this.answers = answers;
     }
     getQuestion(){
         return this.question;
     }
-    //Returns a list of indexes and text of the correct answers
-    printCorrectAnswers(){
-        return this.correctAnswers.map((i)=>(i,this.possibleAnswers[i]))
+    getAnswersTitles(){
+        return this.answers.map((answer) => answer.question)
     }
-    getCorrectAnswers(){
-        return this.correctAnswers
+    addPossibleAnswer(answer="another one", bool=true){
+        this.answers.push({
+                answer: answer,
+                bool : false
+            });
     }
-    getPossibleAnswers(){
-        return this.possibleAnswers
+    getAnswers(){
+        return this.answers
     }
-    printPossibleAnswers(){
-        return this.possibleAnswers.map((i)=>(i,this.possibleAnswers[i]))
-    }
-    addCorrectAnswer(i){
-        if ((0 <= i) && (i< this.possibleAnswers.length))
-            this.correctAnswers.push(i)
-    }
-    delCorrectAnswer(i){
-        if ((0 <= i) && (i< this.possibleAnswers.length)) {
-            let u = this.correctAnswers.indexOf(i);
-            if (u > -1) {
-                this.correctAnswers.splice(u, 1);
-            }
-        }
-    }
-    addPossibleAnswer(answer="another one"){
-        this.possibleAnswers.push(answer)
-    }
-    changeAnswer(i,text) {
-        if ((0 <= i) && (i < this.possibleAnswers.length)) {
-            this.possibleAnswers[i] = text;
-        }
-    }
-
 }
 
 
