@@ -24,6 +24,7 @@
                     </li>
                 </ul>
                 <button @click="quizz.toJson()" >Export to JSON </button>
+                <p> @{{ quizz.exporter }}</p>
          </div>
 
     </body>

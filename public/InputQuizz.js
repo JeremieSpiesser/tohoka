@@ -2,6 +2,7 @@ class InputQuizz{
     constructor(title) {
         this.title = title;
         this.items = [];
+        this.exporter = "";
     }
     addItem(){
         console.log("Items : ");
@@ -26,7 +27,9 @@ class InputQuizz{
         return this.title;
     }
     toJson(){
-        console.log(JSON.stringify(this));
+        this.exporter = "";
+        this.exporter = (JSON.stringify(this));
+        return this.exporter
     }
 
 }
