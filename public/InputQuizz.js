@@ -55,9 +55,8 @@ class InputQuizzItem{
     }
 }
 
-
 var app = new Vue({
-    el: '#app',
+    el: '#vue-app',
     data: {
         quizz: new InputQuizz("sample quizz"),
         jsonExport: ""
@@ -66,6 +65,5 @@ var app = new Vue({
         populateJson(){
             this.jsonExport = this.quizz.toJson();
         }
-
     }
 })
