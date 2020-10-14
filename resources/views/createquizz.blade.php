@@ -6,8 +6,11 @@
 @endsection
 
 @section('content')
+<form method="POST" action="/savequizz">
+    @csrf
     <div class="container">
         <div id="vue-app">
+            <input type="text" name="name" hidden="yes" value="@{{ quizz.getTitle() }}">
             <h1>New Quizz  : @{{ quizz.getTitle() }} </h1>
             <input type="textbox" v-model="quizz.title" />
             <ul>
@@ -25,7 +28,11 @@
             </ul>
             <button v-on:click="quizz.addItem()"> Add item </button>
             <button v-on:click="populateJson()" >Export to JSON </button>
+            <input type="text" name="content" hidden="yes" value="@{{ jsonExport }}">
             <p> @{{ jsonExport }}</p>
+            <input type="submit" value="Save this quizz."></input>
         </div>
     </div>
+</form>
+
 @endsection

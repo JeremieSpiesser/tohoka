@@ -22,6 +22,9 @@ Route::get('/playquizz', function () {
 })->name('quizz-play');
 
 
+Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
+
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();

@@ -17,11 +17,13 @@ class CreateQuizzsTable extends Migration
             $table->id();
             $table->string('name')->default("Quizz");
             $table->json('content');
+            /*
             $table->unsignedBigInteger('creator');
             $table->foreign('creator')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
+             */
             $table->timestamps();
         });
     }
