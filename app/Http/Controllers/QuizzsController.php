@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuizzsController extends Controller
 {
@@ -12,7 +13,7 @@ class QuizzsController extends Controller
 
         $quizz->name = request('name');
         $quizz->content = request('content');
-        //$quizz->creator = request('creator');
+        $quizz->creator = Auth::id();
 
         $quizz->save();
 
