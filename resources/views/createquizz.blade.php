@@ -10,9 +10,8 @@
     @csrf
     <div class="container">
         <div id="vue-app">
-            <input type="text" name="name" hidden="yes" value="@{{ quizz.getTitle() }}">
             <h1>New Quizz  : @{{ quizz.getTitle() }} </h1>
-            <input type="textbox" v-model="quizz.title" />
+            <input type="textbox" name="name" v-model="quizz.title" />
             <ul>
                 <li v-for="item in quizz.items">
                     <h3>@{{ item.getQuestion() }} </h3>
@@ -26,11 +25,11 @@
                     <button @click="item.addPossibleAnswer()"> Add an answer </button>
                 </li>
             </ul>
-            <button v-on:click="quizz.addItem()"> Add item </button>
-            <button v-on:click="populateJson()" >Export to JSON </button>
-            <input type="text" name="content" hidden="yes" value="@{{ jsonExport }}">
+            <button type="button" v-on:click="quizz.addItem()"> Add item </button>
+            <button type="button" v-on:click="populateJson()" >Export to JSON </button>
+            <input v-model="jsonExport" name="content" hidden="yes">
             <p> @{{ jsonExport }}</p>
-            <input type="submit" value="Save this quizz."></input>
+            <input v-on:click="populateJson()" type="submit" value="Save this quizz."></input>
         </div>
     </div>
 </form>
