@@ -11,7 +11,7 @@
 | *Germain*     | *Sophie*      | *sophie.germain@ensiie.fr* |
 | *Ranini*      | *Tony*        | ** |
 | *Spiesser*    | *Jeremy*      | ** |
-| *Alejandra Corredor Moraler*            | *Wendy*            | ** |
+| *Corredor Morales*            | *Wendy Alejandra*            | *wendyalejandra.corredormorales@ensiie.fr* |
 
 ### Sujet : Tohoka (Kahoot-like)
 > Il s'agit de créer un site de mise à disposition de quizz qui puissent être joués à plusieurs en même temps. Dans l'original (https://kahoot.com), 
