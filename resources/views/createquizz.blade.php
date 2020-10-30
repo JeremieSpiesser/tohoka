@@ -22,7 +22,7 @@
                         <li>  @{{ index }} : @{{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer" />
                         <input type="checkbox" v-model="possAnswer.bool" placeholder="Correct answer ?" />
                     </ul>
-                    <button @click="item.addPossibleAnswer()"> Add an answer </button>
+                    <button type="button" @click="item.addPossibleAnswer()"> Add an answer </button>
                 </li>
             </ul>
             <button type="button" v-on:click="quizz.addItem()"> Add item </button>
