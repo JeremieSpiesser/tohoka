@@ -14,6 +14,10 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $quizz->name }}</h5>
                     <p class="card-text">{{ $quizz->content }}</p>
+                    <form method="POST" action="/dropquizz/{{$quizz->id}}">
+                        @csrf
+                        <input type="submit" value="Delete this quizz"  class="btn btn-danger">
+                    </form>
                 </div>
             </div><br/>
 
