@@ -17,7 +17,6 @@ class QuizzsController extends Controller
 
         $quizz->save();
 
-        return redirect('/');
-
+        return redirect('/myquizz');
     }
 }
