@@ -25,6 +25,10 @@ Route::get('/viewquizz', function () {
     return view('viewquizz');
 })->name('quizz-view');
 
+Route::get('/myquizz', function () {
+    return view('myquizz');
+})->name('user-quizz');
+
 
 Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
 
