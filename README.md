@@ -4,14 +4,14 @@
 
 ### Composition de l'équipe
 
-| Nom           | Prénom        | Email                         |
-| ------------- |-------------  |-------------------------------|
-| *Goyard*      | *Louis*       | *goyard.louis@gmail.com* |
-| *Sadler*      | *Alec*        | ** |
-| *Germain*     | *Sophie*      | *sophie.germain@ensiie.fr* |
-| *Ranini*      | *Tony*        | ** |
-| *Spiesser*    | *Jeremy*      | ** |
-| *Alejandra Corredor Moraler*            | *Wendy*            | ** |
+| Nom                | Prénom            | Email                                      |
+| -------------      | -------------     | -------------------------------            |
+| *Goyard*           | *Louis*           | *goyard.louis@gmail.com*                   |
+| *Sadler*           | *Alec*            | **                                         |
+| *Germain*          | *Sophie*          | *sophie.germain@ensiie.fr*                 |
+| *Ranini*           | *Tony*            | **                                         |
+| *Spiesser*         | *Jérémie*         | *jeremie.spiesser@ensiie.fr*               |
+| *Corredor Morales* | *Wendy Alejandra* | *wendyalejandra.corredormorales@ensiie.fr* |
 
 ### Sujet : Tohoka (Kahoot-like)
 > Il s'agit de créer un site de mise à disposition de quizz qui puissent être joués à plusieurs en même temps. Dans l'original (https://kahoot.com), 
