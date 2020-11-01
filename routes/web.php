@@ -21,13 +21,13 @@ Route::get('/playquizz', function () {
     return view('playquizz');
 })->name('quizz-play');
 
-Route::get('/viewquizz', function () {
-    return view('viewquizz');
-})->name('quizz-view');
+Route::get('/myquizz', function () {
+    return view('myquizz');
+})->name('user-quizz');
 
 
 Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
-
+Route::post('/dropquizz/{quizzid}','\App\Repositories\QuizzRepository@dropQuizz');
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
