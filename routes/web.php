@@ -25,6 +25,10 @@ Route::get('/myquizz', function () {
     return view('myquizz');
 })->name('user-quizz');
 
+Route::get('/modifyquizz', function () {
+    return view('modifyquizz');
+})->name('quizz-modify');
+
 
 Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
 Route::post('/dropquizz/{quizzid}','\App\Repositories\QuizzRepository@dropQuizz');
