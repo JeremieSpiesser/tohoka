@@ -6,12 +6,12 @@
 @endsection
 @section('content')
 
-<?php $id=$_GET['quizzId']; 
+<?php $id=$_GET['quizzId'];
 $cont=DB::select('select content from quizzs where id = :id',['id'=>$id]);
 $quizzContent=$cont[0]->content;
-echo "<p> $id</p>";
-echo "<p> $quizzContent</p>";
+echo "<script type='application/javascript' defer> var chaine = '$quizzContent' </script> ";
 ?>
+
 
 <form method="POST" action="/modQuizz">
     @csrf
@@ -35,10 +35,12 @@ echo "<p> $quizzContent</p>";
             <button type="button" v-on:click="quizz.addItem()"> Add item </button>
             <button type="button" v-on:click="populateJson()" >Export to JSON </button>
             <input v-model="jsonExport" name="content" hidden="yes">
+            <?php echo "<input type='hidden' name='id' value=$id />" ?>
             <p> @{{ jsonExport }}</p>
             <input v-on:click="populateJson()" type="submit" value="Save this quizz."></input>
         </div>
     </div>
-</form>
+    </form>
+
 
 @endsection

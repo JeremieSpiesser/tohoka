@@ -46,13 +46,15 @@ class InputQuizzItem{
     }
     addPossibleAnswer(answer="another one", bool=true){
         this.answers.push({
-                answer: answer,
-                bool : false
-            });
+            answer: answer,
+            bool : false
+        });
     }
     getAnswers(){
         return this.answers
     }
+
+
 }
 
 var app = new Vue({
@@ -61,9 +63,22 @@ var app = new Vue({
         quizz: new InputQuizz("sample quizz"),
         jsonExport: ""
     },
+    mounted: function(){
+        if (typeof chaine !== 'undefined'){
+        this.loadQuizz(chaine);
+        }
+    },
     methods: {
         populateJson(){
             this.jsonExport = this.quizz.toJson();
+        },
+        loadQuizz(text){
+            let instance = new InputQuizz();                  // NOTE: if your constructor checks for unpassed arguments, then just pass dummy ones to prevent throwing an error
+            let serializedObject = JSON.parse(text);
+            Object.assign(instance, serializedObject);
+            instance.items = instance.items.map((item) => new InputQuizzItem(item.question, item.answers));
+            this.quizz = instance;
         }
     }
-})
+
+    })
