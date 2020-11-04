@@ -31,6 +31,7 @@ Route::get('/modifyquizz', function () {
 
 
 Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
+Route::post('/modQuizz','\App\Http\Controllers\QuizzsController@modifyQuizz');
 Route::post('/dropquizz/{quizzid}','\App\Repositories\QuizzRepository@dropQuizz');
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
