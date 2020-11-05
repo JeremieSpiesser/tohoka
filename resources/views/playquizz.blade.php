@@ -5,16 +5,15 @@
     <script type="application/javascript" src="{{ asset('OutputQuizz.js') }}"></script>
 @endsection
 
+<?php 
+    $id=$_GET['quizzId'];
+    $cont=DB::select('select content from quizzs where id = :id',['id'=>$id]);
+    $quizzContent=$cont[0]->content;
+    echo "<input type='hidden' id='userBackup' rows='10' value='$quizzContent' cols='50'>"
+?>
 @section('content')
     <div class="container">
         <div id="playQuizz">
-            <h1> Play a quizz here </h1>
-            <p> Enter your json backup here (will disappear when quizz will be load from the DB) :</p>
-            <textarea id="userBackup" rows="10" cols="50">
-
-
-            </textarea>
-            <br/>
             <button type="submit" class="btn btn-primary" @click="loadQuizz">Let's play !</button>
             <h1><br/>@{{ quizz.getTitle() }}</h1>
             <ul>
