@@ -59,14 +59,17 @@
 ### Titre des nouvelles User Stories  
 *Lister ici les nouveaux éléments pour l'itération suivante. Ces éléments ont dû être revus et corrigés par le PO.*
 > Le sprint 2 étant plus long, nous avons défini 8 US :
-> - Enregistrer mon quizz
-> - Diversifier le type de questions de mon quizz
-> - Accéder à la liste de mes quizz
-> - Bénéficier d'un système de points sur un quizz auquel je joue
-> - Modifier un de mes quizz
-> - Supprimer une question/réponse lors de la création/modification de l'un de mes quizz
-> - Jouer seul à un quizz (pas seulement juste après sa création)
-> - Supprimer l'un de mes quizz
+> - Styling the quizz
+> - Styling the website
+> - Gerer la visibilité de la présence d'utilisateurs dans un salon (privé ou non)
+> - Types de question des quizs
+> - Accéder aux informations sur le tohoka
+> - Accéder aux quizz public d'autres utilisateurs
+> - Rendre des quizz privés
+> - Pouvoir supprimer une question d'un quizz déjà créé
+> - Rajouter des question à base d'image
+> - Rajouter des question à base de son
+> - Rajouter de la musique de fond
 >
 > De plus, nous avons 2 US techniques (à éviter certes, mais impossible à contourner ici) :
 > - La mise en place d'une intégration continue 
