@@ -41,10 +41,16 @@
 
             <button type="button" class="btn btn-primary" v-if="!gameFinished && gameStarted" @click="toggleFinished()"> Show answers </button>
 
-            <div class="jumbotron jumbotron-fluid" v-if="gameFinished">
+            <div class="jumbotron" v-if="gameFinished" style="background-color:#ffc107; color:white;">
                 <div class="container">
                     <h1 class="display-4">Congratulations, you've got @{{ nbpoints }}/@{{ nbgoodanswers }} !</h1>
-                    <button type="button" class=" lead btn btn-primary" @click="toggleFinished()"> Hide answers </button>
+                    <div class="progress">
+                        <div id="achievement" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">@{{ score }}%</div>
+                    </div><br/>
+                    <hr>
+                    <div class="row justify-content-center">
+                        <button type="button" class="d-flex justify-content-center btn btn-danger" @click="toggleFinished()"> Hide answers </button>
+                    </div>
                 </div>
             </div>
 

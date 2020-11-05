@@ -84,6 +84,13 @@ var playQuizz = new Vue({
             instance.items = instance.items.map((item) => new OutputQuizzItem(item.question, item.answers));
             this.quizz = instance;
         },
+        /*handleProgressBar(){
+            var progress = document.getElementById("achievement");
+            progress.focus();
+            progress.style.width = this.score + "%";
+            //progress.aria-valuenow = this.score;
+
+        },*/
         toggleFinished() {
             this.reset();
             document.querySelectorAll('input[type=checkbox]').forEach((checkbox) => {
@@ -96,6 +103,7 @@ var playQuizz = new Vue({
                 this.nbgoodanswers += item.getNbGoodAnswers();
             }
             this.score = (this.nbpoints/this.nbgoodanswers) * 100;
+            //this.handleProgressBar();
         }
     }
 })
