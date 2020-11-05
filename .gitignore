@@ -13,4 +13,6 @@ npm-debug.log
 yarn-error.log
 /public/js
 /public/css
+/public/fonts
 /public/mix-manifest.json
+_ide_helper.php

@@ -23,3 +23,29 @@
 ### Adresse du backlog : https://trello.com/b/Lk7tZItG/tohoka
 
 ### Adresse de la mise en production : https://tohoka.tk
+
+## Mise en place du WebSocket
+
+### Installation de l'environnement de dev
+
+Vous aurez besoin de redis-server ainsi que PHPRedis (`sudo apt install redis-server php-redis`)
+
+Ensuite, regardez le `.env.example` et mettez les nouveaux champs à jour dans votre `.env`, c'est à dire :
+ * APP_URL: Doit être le site effectif, port compris (par exemple `http://localhost:8000`)
+ * MIX_SOCKET_PORT: Le port du websocket (pour que le client JS se connecte au websocket serveur)
+ * BROADCAST_DRIVER: Doit être `redis`
+ * QUEUE_CONNECTION: Doit rester `sync` (Laravel gère lui même les tâches de broadcast)
+ * REDIS_CLIENT: Doit être `phpredis` (autre client non supporté)
+ * REDIS_PREFIX: Par commodité, on le laisse vide !
+ * REDIS_HOST: Le domaine du serveur REDIS du point de vue Laravel
+ * REDIS_PASSWORD: Le mot de passe du serveur REDIS du point de vue Laravel
+ * REDIS_PORT: Le port du serveur REDIS du point de vue Laravel
+
+Pour lancer le tout, il faut toujours faire plusieurs étapes :
+
+ 1. Faire un `composer install && npm install` 
+ 2. Toujours lancer `npm run dev` après avoir touché au JS dans `resources/js/` et au moins une fois si jamais fait
+ 3. Il faut démarrer `redis-server` si ce n'est pas fait
+ 4. Pour lancer le serveur, il faut lancer dans 2 consoles : `php artisan serve` et `npm run echo`
+
+Vous pouvez contrôler la liaison Laravel-Websocket avec la commande `redis-cli monitor`

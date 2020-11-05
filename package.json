@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "echo": "nodejs echo-server.js",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -22,5 +23,11 @@
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.1",
+        "laravel-echo": "^1.8.1",
+        "laravel-echo-server": "^1.6.2",
+        "socket.io-client": "^2.3.1"
     }
 }

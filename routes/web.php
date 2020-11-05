@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\PrivateTestEvent;
+use App\Events\TestEvent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,3 +39,19 @@ Route::post('/dropquizz/{quizzid}','\App\Repositories\QuizzRepository@dropQuizz'
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
+
+Route::get('/chat', function (){
+    return view('testchat');
+});
+
+Route::post('/postMsg', [App\Http\Controllers\Message\PostMessageController::class, 'handle']);
+
+Route::get('/fire', function () {
+    event(new TestEvent());
+    return 'ok pub';
+});
+
+Route::get('/fire-priv', function () {
+    event(new PrivateTestEvent());
+    return 'ok priv';
+});

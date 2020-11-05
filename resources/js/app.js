@@ -30,3 +30,10 @@ require('./bootstrap');
 /*const app = new Vue({
     el: '#app',
 });*/
+
+Echo.channel('test')
+    .listen('TestEvent', e => {
+            console.log(e);
+            alert('Une notif x3');
+        }
+    );
