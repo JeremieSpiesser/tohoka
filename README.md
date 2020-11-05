@@ -7,9 +7,9 @@
 | Nom                | Prénom            | Email                                      |
 | -------------      | -------------     | -------------------------------            |
 | *Goyard*           | *Louis*           | *goyard.louis@gmail.com*                   |
-| *Sadler*           | *Alec*            | **                                         |
+| *Sadler*           | *Alec*            | *alec.sadler@ensiie.fr*                    |
 | *Germain*          | *Sophie*          | *sophie.germain@ensiie.fr*                 |
-| *Ranini*           | *Tony*            | **                                         |
+| *Ranini*           | *Tony*            | *nitorac.r@gmail.com*                      |
 | *Spiesser*         | *Jérémie*         | *jeremie.spiesser@ensiie.fr*               |
 | *Corredor Morales* | *Wendy Alejandra* | *wendyalejandra.corredormorales@ensiie.fr* |
 
