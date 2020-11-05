@@ -12,20 +12,37 @@ class OutputQuizz{
 class OutputQuizzItem{
     //question : the question (string)
     // questions : a list of {answer: str, correct: bool, userChoice: bool}  with all the questions (bool true if correct, false if not)
-    constructor(question,answers) {
+    constructor(question,answers,type="qcm") {
         this.question = question;
         this.answers = answers;
         this.total = 0;
         this.score = 0;
+        this.type = type;
+        this.isTrue = true;
+        this.userUniqueChoice = undefined;
+        this.userTfChoice = true;
     }
     getQuestion(){
         return this.question;
     }
     getAnswersTitles(){
-        return this.answers.map((answer) => answer.question)
+        return this.answers.map((answer) => answer.question);
     }
     getAnswers(){
-        return this.answers
+        return this.answers;
+    }
+    //Finds an answer and switches all the others to false
+    disableOthers(ans){
+        console.log(ans);
+        let i = this.answers.indexOf(ans);
+        console.log(i);
+        if (i!=-1){
+            for (let j=0 ; j < this.answers.length ; j += 1){
+                if (j!=i){
+                    this.answers[j].userChoice = false;
+                }            
+            }
+        }
     }
     getNbGoodAnswers() {
         var n = 0;
@@ -81,8 +98,11 @@ var playQuizz = new Vue({
             let instance = new OutputQuizz();                  // NOTE: if your constructor checks for unpassed arguments, then just pass dummy ones to prevent throwing an error
             let serializedObject = JSON.parse(text);
             Object.assign(instance, serializedObject);
-            instance.items = instance.items.map((item) => new OutputQuizzItem(item.question, item.answers));
+            instance.items = instance.items.map((item) => new OutputQuizzItem(item.question, item.answers,item.type));
             this.quizz = instance;
+            instance.items.forEach(function(item){
+                item.userChoice = false;
+            });
         },
         /*handleProgressBar(){
             var progress = document.getElementById("achievement");
