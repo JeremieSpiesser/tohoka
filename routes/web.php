@@ -25,8 +25,13 @@ Route::get('/myquizz', function () {
     return view('myquizz');
 })->name('user-quizz');
 
+Route::get('/modifyquizz', function () {
+    return view('modifyquizz');
+})->name('quizz-modify');
+
 
 Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
+Route::post('/modQuizz','\App\Http\Controllers\QuizzsController@modifyQuizz');
 Route::post('/dropquizz/{quizzid}','\App\Repositories\QuizzRepository@dropQuizz');
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

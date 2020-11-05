@@ -19,4 +19,14 @@ class QuizzsController extends Controller
 
         return redirect('/myquizz');
     }
+    public function modifyQuizz(){
+
+        $name = request('name');
+        $content = request('content');
+        $id = request('id');
+        $update=\DB::table('quizzs')
+            ->where('id',$id)
+            ->update(['content'=>$content],['name'=>$name],['updated_at'=>date('yy-m-d h:i:s')]);
+        return redirect('/myquizz');
+    }
 }
