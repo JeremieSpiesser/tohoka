@@ -15,21 +15,22 @@
 
             </textarea>
             <br/>
-            <button @click="loadQuizz">Let's play !</button>
-            <h1>@{{ quizz.getTitle() }}</h1>
+            <button type="submit" class="btn btn-primary" @click="loadQuizz">Let's play !</button>
+            <h1><br/>@{{ quizz.getTitle() }}</h1>
             <ul>
                 <li v-for="item in quizz.items">
-                    <h3>@{{ item.getQuestion() }} </h3>
+                        <h3  v-if="gameFinished" class="alert alert-primary" role="alert">
+                            @{{ item.getQuestion() }}<div style="text-align:right;font-style: italic;">Score : @{{ item.getScore() }}/@{{ item.getNbGoodAnswers() }}</div></h3>
+                        <h3  v-else>@{{ item.getQuestion() }} </h3>
+
                     <ul v-for="(possAnswer,index) in item.getAnswers()">
                         <li>  @{{ index }} : @{{ possAnswer.answer }}
                             <input type="checkbox" v-model="possAnswer.userChoice">
 
                             <div v-if="gameFinished">
                                 <p v-if="possAnswer.userChoice && (possAnswer.userChoice === possAnswer.bool)" style="color:green"> Bravo :) </p>
-                                <p v-else-if="possAnswer.userChoice && (possAnswer.userChoice != possAnswer.bool)" style="color:red"> C'est FAUX :( </p>
-                                <p v-else-if="!possAnswer.userChoice && possAnswer.bool"> Il fallait cliquer ici, dommage :/ <p>
-                                <p v-if="!possAnswer.bool && !possAnswer.userChoice">
-
+                                <p v-else-if="possAnswer.userChoice && !(possAnswer.userChoice === possAnswer.bool)" style="color:red"> C'est FAUX :( </p>
+                                <p v-else-if="!possAnswer.userChoice && possAnswer.bool"> Il fallait cliquer ici, dommage :/ </p>
                             </div>
                         </li>
 
@@ -38,10 +39,14 @@
                 </li>
             </ul>
 
-            <button @click="toggleFinished()">
-                <div v-if="gameFinished"> Hide answers </div>
-                <div v-else> Show answers </div>
-            </button>
+            <button type="button" class="btn btn-primary" v-if="!gameFinished && gameStarted" @click="toggleFinished()"> Show answers </button>
+
+            <div class="jumbotron jumbotron-fluid" v-if="gameFinished">
+                <div class="container">
+                    <h1 class="display-4">Congratulations, you've got @{{ nbpoints }}/@{{ nbgoodanswers }} !</h1>
+                    <button type="button" class=" lead btn btn-primary" @click="toggleFinished()"> Hide answers </button>
+                </div>
+            </div>
 
         </div>
     </div>

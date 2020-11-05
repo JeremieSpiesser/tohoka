@@ -15,7 +15,8 @@ class OutputQuizzItem{
     constructor(question,answers) {
         this.question = question;
         this.answers = answers;
-
+        this.total = 0;
+        this.score = 0;
     }
     getQuestion(){
         return this.question;
@@ -26,6 +27,30 @@ class OutputQuizzItem{
     getAnswers(){
         return this.answers
     }
+    getNbGoodAnswers() {
+        var n = 0;
+        for(var ans of this.getAnswers()){
+            if(ans.bool === true)
+                n++;
+        }
+        this.total = n;
+        return this.total;
+    }
+    computeScore(){
+        for(var ans of this.getAnswers()){
+            if(ans.userChoice === undefined)
+                ans.userChoice = false;
+            if(ans.userChoice && (ans.userChoice === ans.bool))
+                this.score++;
+            else if ((ans.userChoice && !(ans.userChoice === ans.bool))|| (!ans.userChoice && ans.bool))
+                this.score--;
+        }
+        if (this.score < 0)
+            this.score = 0;
+    }
+    getScore() {
+        return this.score;
+    }
 }
 
 
@@ -33,10 +58,23 @@ var playQuizz = new Vue({
     el: '#playQuizz',
     data: {
         quizz: new OutputQuizz(""),
-        gameFinished: false
+        gameFinished: false,
+        gameStarted: false,
+        nbgoodanswers:0,
+        nbpoints: 0,
+        score: 0
     },
     methods: {
+        reset() {
+            //this.gamefinished = false;
+            //this.gameStarted = true;
+            this.nbgoodanswers = 0;
+            this.nbpoints = 0;
+            this.score = 0;
+        },
         loadQuizz(text){
+            this.gameStarted = true;
+            this.reset();
             text = document.getElementById("userBackup").value;
             console.log("Corresponding json :");
             console.log(text);
@@ -46,11 +84,18 @@ var playQuizz = new Vue({
             instance.items = instance.items.map((item) => new OutputQuizzItem(item.question, item.answers));
             this.quizz = instance;
         },
-        toggleFinished(){
-            document.querySelectorAll('input[type=checkbox]').forEach((checkbox)=>{
+        toggleFinished() {
+            this.reset();
+            document.querySelectorAll('input[type=checkbox]').forEach((checkbox) => {
                 checkbox.disabled = !checkbox.disabled;
             })
             this.gameFinished = !this.gameFinished;
+            for (var item of this.quizz.items) {
+                item.computeScore();
+                this.nbpoints += item.getScore();
+                this.nbgoodanswers += item.getNbGoodAnswers();
+            }
+            this.score = (this.nbpoints/this.nbgoodanswers) * 100;
         }
     }
 })
