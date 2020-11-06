@@ -9,8 +9,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts-->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @yield('__vuejs')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -43,8 +43,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('quizz-create') }}">{{ __('Créer un quizz') }}</a>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('quizz-play') }}">{{ __('Jouer à un quizz') }}</a>
+                                <a class="nav-link" href="{{ route('user-quizz') }}">{{ __('Mes Quizz') }}</a>
                             </li>
 			<!-- Authentication Links -->
                         @guest
@@ -63,8 +64,6 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('user-quizz') }}">{{ __('Mes Quizz') }}</a>
-
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

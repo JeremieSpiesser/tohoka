@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 var echo = require('laravel-echo-server');
 echo.run({
     "authHost": process.env.APP_URL,
