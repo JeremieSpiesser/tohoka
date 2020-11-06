@@ -14,13 +14,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class QuizzRepository
 {
-    public function dropQuizz($quizzid){
-        Quizz::find($quizzid)->delete();
-        return redirect('/myquizz');
-    }
-
     public static function findByUID(){
-        $userid = Auth::id();
-        return Quizz::where('creator', '=', $userid)->get();
+        return Quizz::where('creator', Auth::id())->get();
     }
 }

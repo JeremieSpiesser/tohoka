@@ -1,29 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="container">
-    <?php
-    $quizzs = \App\Repositories\QuizzRepository::findByUID();
-    ?>
-
     <h1>My quizz :</h1>
         @forelse ($quizzs as $quizz)
-
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ $quizz->name }}</h5>
                     <p class="card-text">{{ $quizz->content }}</p>
 
-                    <form method="GET" action="/modifyquizz"> 
-                        <input type="hidden" name="quizzId" value="{{$quizz->id}}" /> 
-                        <input type="submit" value="modify this quizz" >
-                    </form>
+                    <a class="btn btn-success" href="{{ route('quizz-play', ['id' => $quizz->id]) }}">
+                        Play this quizz
+                    </a>
 
-                    <form method="POST" action="/dropquizz/{{$quizz->id}}">
-                        @csrf
-                        <input type="submit" value="Delete this quizz"  class="btn btn-danger">
-                    </form>
+                    <a class="btn btn-primary" href="{{ route('quizz-modify', ['id' => $quizz->id]) }}">
+                        Modify this quizz
+                    </a>
+
+                    <a class="btn btn-danger" href="{{ route('quizz-api-drop', ['id' => $quizz->id]) }}">
+                        Delete this quizz
+                    </a>
                 </div>
             </div><br/>
 

@@ -19,22 +19,30 @@ Route::get('/createquizz', function () {
     return view('createquizz');
 })->name('quizz-create');
 
-Route::get('/playquizz', function () {
-    return view('playquizz');
-})->name('quizz-play');
+Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
+    ->middleware('auth')
+    ->name('quizz-play');
 
-Route::get('/myquizz', function () {
-    return view('myquizz');
-})->name('user-quizz');
+Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
+    ->middleware('auth')
+    ->name('user-quizz');
 
-Route::get('/modifyquizz', function () {
-    return view('modifyquizz');
-})->name('quizz-modify');
+Route::get('/modifyquizz/{id}', '\App\Http\Controllers\QuizzsUIController@modifyQuizz')
+    ->middleware('auth')
+    ->name('quizz-modify');
 
 
-Route::post('/savequizz','\App\Http\Controllers\QuizzsController@saveQuizz');
-Route::post('/modQuizz','\App\Http\Controllers\QuizzsController@modifyQuizz');
-Route::post('/dropquizz/{quizzid}','\App\Repositories\QuizzRepository@dropQuizz');
+Route::post('/savequizz','\App\Http\Controllers\QuizzsAPIController@saveQuizz')
+    ->middleware('auth')
+    ->name('quizz-api-save');
+
+Route::post('/modQuizz/{id}','\App\Http\Controllers\QuizzsAPIController@modifyQuizz')
+    ->middleware('auth')
+    ->name('quizz-api-modify');
+
+Route::get('/dropquizz/{id}','\App\Http\Controllers\QuizzsAPIController@dropQuizz')
+    ->middleware('auth')
+    ->name('quizz-api-drop');
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
