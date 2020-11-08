@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('custom-js')
+    <script type="text/javascript" src="{{ asset('js/chat.js') }}" defer></script>
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -10,76 +14,13 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="chat-users">
+                                    <div id="users-list" class="users-list">
 
-
-                                    <div class="users-list">
-                                        <div class="chat-user">
-                                            <div class="chat-user-name">
-                                                Karl Jordan
-                                            </div>
-                                        </div>
-                                        <div class="chat-user">
-                                            <div class="chat-user-name">
-                                                Karl Jordan
-                                            </div>
-                                        </div>
-                                        <div class="chat-user">
-                                            <div class="chat-user-name">
-                                                Karl Jordan
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-9 ">
-                                <div class="chat-discussion">
-                                    <div class="chat-message left">
-                                        <div class="message">
-                                            <a class="message-author" href="#"> Michael Smith </a>
-                                            <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
-                                            <span class="message-content">
-    										Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="chat-message right">
-                                        <div class="message">
-                                            <a class="message-author" href="#"> Karl Jordan </a>
-                                            <span class="message-date">  Fri Jan 25 2015 - 11:12:36 </span>
-                                            <span class="message-content">
-											Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="chat-message right">
-                                        <div class="message">
-                                            <a class="message-author" href="#"> Michael Smith </a>
-                                            <span class="message-date">  Fri Jan 25 2015 - 11:12:36 </span>
-                                            <span class="message-content">
-											There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="chat-message left">
-                                        <div class="message">
-                                            <a class="message-author" href="#"> Alice Jordan </a>
-                                            <span class="message-date">  Fri Jan 25 2015 - 11:12:36 </span>
-                                            <span class="message-content">
-											All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-                                                It uses a dictionary of over 200 Latin words.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="chat-message right">
-                                        <div class="message">
-                                            <a class="message-author" href="#"> Mark Smith </a>
-                                            <span class="message-date">  Fri Jan 25 2015 - 11:12:36 </span>
-                                            <span class="message-content">
-											All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-                                                It uses a dictionary of over 200 Latin words.
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div id="chat-discussion" class="chat-discussion">
 
                                 </div>
 
@@ -90,10 +31,10 @@
                                 <div class="chat-message-form">
                                     <div class="form-row align-items-center">
                                         <div class="col-auto flex-fill">
-                                            <textarea class="form-control input-lg" name="message" placeholder="Entrez un message et appuyez sur Entrer"></textarea>
+                                            <textarea class="form-control input-lg" id="inputMsg" name="message" placeholder="Entrez un message et appuyez sur Entrer"></textarea>
                                         </div>
                                         <div class="col-auto">
-                                            <button type="submit" class="btn btn-block btn-primary flex-grow-5">Submit</button>
+                                            <button id="sendMsgBtn" type="submit" class="btn btn-block btn-primary flex-grow-5">Envoyer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -207,17 +148,17 @@
             border-radius: 4px;
         }
         .chat-discussion .chat-message.left .message-date {
-            float: right;
-        }
-        .chat-discussion .chat-message.right .message-date {
             float: left;
         }
+        .chat-discussion .chat-message.right .message-date {
+            float: right;
+        }
         .chat-discussion .chat-message.left .message {
-            text-align: left;
+            text-align: right;
             margin-left: 55px;
         }
         .chat-discussion .chat-message.right .message {
-            text-align: right;
+            text-align: left;
             margin-right: 55px;
         }
         .message-date {

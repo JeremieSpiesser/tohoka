@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\User;
 use App\Utils;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Session;
+use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,21 +23,32 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Route::post('/broadcasting/auth', function (){
-    $user = new GenericUser(['id' => microtime()]);
-
-    request()->setUserResolver(function () use ($user) {
-        return $user;
-    });
-
-    return Broadcast::auth(request());
-});
-
-Broadcast::channel('public_room', function ($user) {
-    if(!Session::has('chat_name')){
-        Session::put('chat_name', Utils::randomName());
+    if (request()->hasSession()) {
+        request()->session()->reflash();
     }
 
-    Log::info("ID = ", Session::get('chat_name'));
+    if(!Auth::check()){
+        $user = new GenericUser(['id' => Uuid::uuid4()]);
 
-    return ['id' => $user->id(), 'name' => Session::get('chat_name')];
+        request()->setUserResolver(function () use ($user) {
+            return $user;
+        });
+    }
+
+    Session::put('public_room_user_id', request()->user()->id);
+
+    return Broadcast::auth(request());
+})->middleware(['web']);
+
+Broadcast::channel('public_room', function ($user) {
+    if(!User::isRegistered($user)) {
+        if(!Session::has('chat_name')){
+            Session::put('chat_name', 'Guest: ' . Utils::randomName());
+        }
+        $user->name = Session::get('chat_name');
+    }
+
+    //Log::info('User: ' . print_r($user, true));
+
+    return ['id' => $user->id, 'name' => $user->name];
 });

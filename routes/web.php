@@ -52,7 +52,12 @@ Route::get('/chat', function (){
     return view('testchat');
 });
 
-Route::post('/postMsg', [App\Http\Controllers\Message\PostMessageController::class, 'handle']);
+
+/**
+ * LES TESTS EN DESSOUS SVP
+ */
+
+Route::post('/message', [App\Http\Controllers\Message\PostMessageController::class, 'handle']);
 
 Route::get('/fire', function () {
     event(new TestEvent());
@@ -63,3 +68,5 @@ Route::get('/fire-priv', function () {
     event(new PrivateTestEvent());
     return 'ok priv';
 });
+
+
