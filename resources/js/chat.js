@@ -32,13 +32,15 @@ window.Echo.join('public_room')
                 return;
             }
             name = name.name;
-            $("#chat-discussion").append(
+            const discussion = $("#chat-discussion");
+            discussion.append(
                 "<div class=\"chat-message " + (String(e.sender) === String(myUserId) ? "left" : "right") + "\">" +
                 "<div class=\"message\">" +
                 "<a class=\"message-author\" href=\"#\"> " + name + " </a>" +
                 "<span class=\"message-date\"> " + e.date + " </span>" +
                 "<span class=\"message-content\">" + e.message + "</span></div></div>"
             );
+            discussion.animate({ scrollTop: discussion[0].scrollHeight}, 500);
         }
     );
 
