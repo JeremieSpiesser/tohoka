@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class QuizzsUIController extends Controller
 {
+
+    function createQuizz(){
+        return view('createquizz');
+    }
+
     function myQuizz(){
         return view('myquizz', ['quizzs' => QuizzRepository::findByUID()]);
     }

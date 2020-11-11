@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/createquizz', function () {
-    return view('createquizz');
-})->name('quizz-create');
+Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz')
+    ->middleware('auth')
+    ->name('quizz-create');
 
 Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
     ->middleware('auth')
