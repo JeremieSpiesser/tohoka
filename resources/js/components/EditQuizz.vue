@@ -3,9 +3,12 @@
         <h1>Quizz : {{ quizz.title }}</h1>
         <input type="textbox" name="name" v-model="quizz.title" />
         <ul>
-            <li v-for="item in quizz.items">
+            <li v-for="(item,ind) in quizz.items">
                 <h3>{{ item.question }} </h3>
                 <input type="textbox" v-model="item.question" />
+                <input type="button" value="Delete" 			@click="quizz.removeItemAt(ind)">
+          
+                
                 <select v-model="item.type">
                     <option value="qcm">QCM sans avertissement</option>
                     <option value="classic">Question à réponse unique</option>
@@ -15,8 +18,11 @@
 
                 <div v-if="item.type === 'classic'">
                     <ul v-for="(possAnswer,index) in item.answers">
-                        <li>  {{ index }} : {{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer" />
-                        Vrai ? <input type="checkbox" v-model="possAnswer.bool" @click="item.disableOthers(possAnswer)" placeholder="Correct answer ?" />
+                    
+                 
+                        <li>  {{ index }} : {{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer" /> 
+                        Vrai ? <input type="checkbox" v-model="possAnswer.bool" @click="item.disableOthers(possAnswer)" placeholder="Correct answer ?" />  <input type="button"/>  
+                    
                     </ul>
                     <button type="button" @click="item.addPossibleAnswer()"> Add an answer </button>
 

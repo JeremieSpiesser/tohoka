@@ -14,9 +14,8 @@ module.exports.InputQuizz = function(title){
                 }]));
         },
         removeItemAt: function(i){
-            let u = this.items.indexOf(i);
-            if (u > -1) {
-                this.items.splice(u, 1);
+            if (i > -1) {
+                this.items.splice(i, 1);
             }
         },
         toJson: function(){
@@ -65,6 +64,10 @@ module.exports.InputQuizzItem = function(question, answers, type="qcm"){
                         answer: "Number two",
                         bool: true
                     }];
+            }
+        },removeItemAt: function(i){
+            if (i > -1) {
+                this.answers.splice(i, 1);
             }
         },
         disableOthers: function(ans){
