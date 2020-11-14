@@ -2,7 +2,9 @@
 
 use App\Events\PrivateTestEvent;
 use App\Events\TestEvent;
+use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Route;
+use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,21 +54,22 @@ Route::get('/chat', function (){
     return view('testchat');
 });
 
-
-/**
- * LES TESTS EN DESSOUS SVP
- */
-
 Route::post('/message', [App\Http\Controllers\Message\PostMessageController::class, 'handle']);
 
-Route::get('/fire', function () {
-    event(new TestEvent());
-    return 'ok pub';
+Route::post('/broadcasting/auth', function (){
+    if (request()->hasSession()) {
+        request()->session()->reflash();
+    }
+
+    if(!Auth::check()){
+        $user = new GenericUser(['id' => Uuid::uuid4()]);
+
+        request()->setUserResolver(function () use ($user) {
+            return $user;
+        });
+    }
+
+    Session::put('public_room_user_id', request()->user()->id);
+
+    return Broadcast::auth(request());
 });
-
-Route::get('/fire-priv', function () {
-    event(new PrivateTestEvent());
-    return 'ok priv';
-});
-
-
