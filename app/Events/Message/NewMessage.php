@@ -16,6 +16,7 @@ class NewMessage implements ShouldBroadcast
     public $sender;
     public $message;
     public $date;
+    public $room;
 
     /**
      * Create a new event instance.
@@ -23,12 +24,14 @@ class NewMessage implements ShouldBroadcast
      * @param string $sender
      * @param string $message
      * @param string $date
+     * @param string $room
      */
-    public function __construct(string $sender, string $message, string $date)
+    public function __construct(string $sender, string $message, string $date, string $room)
     {
         $this->sender = $sender;
         $this->message = $message;
         $this->date = $date;
+        $this->room = $room;
     }
 
     /**
@@ -38,6 +41,6 @@ class NewMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('public_room');
+        return new PresenceChannel('room.' . $this->room);
     }
 }

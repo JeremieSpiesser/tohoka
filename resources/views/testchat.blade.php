@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('custom-js')
+    <script type="text/javascript">window.roomId = '{{ $id }}';</script>
     <script type="text/javascript" src="{{ asset('js/chat.js') }}" defer></script>
 @endsection
 
@@ -46,17 +47,6 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('custom-js')
-<script type="text/javascript">
-    window.addEventListener('load', function() {
-        Echo.join('public_room')
-            .here(users => {
-                console.log(users);
-            })
-    });
-</script>
 @endsection
 
 @section('custom-head')
