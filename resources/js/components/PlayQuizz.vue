@@ -66,10 +66,23 @@
                 </div>
             </div>
         </div>
+
+    <audio id="BGM">
+        <source :src="quizz.backgroundAudio" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+    <button onclick="playBGM()" type="button">Play Audio</button>
+
     </div>
 </template>
 
 <script>
+
+var audioElement = document.getElementById("BGM"); 
+
+function playBGM() { 
+  audioElement.play(); 
+}
 
 import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
 
