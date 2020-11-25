@@ -1,5 +1,6 @@
 module.exports.InputQuizz = function(title){
     return {
+        bgm: bgm,
         title: title,
         items: [],
         addItem: function(){
@@ -20,6 +21,7 @@ module.exports.InputQuizz = function(title){
         },
         toJson: function(){
             let obj = {};
+            obj.bgm = this.bgm;
             obj.title = this.title;
             obj.items = this.items;
             return JSON.stringify(obj);

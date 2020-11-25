@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Quizz;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 
 class QuizzsAPIController extends Controller
 {
-    public function saveQuizz(){
+    public function saveQuizz(Request $request){
 
         $quizz = new Quizz();
 
         $quizz->name = request('name');
         $quizz->content = request('content');
         $quizz->creator = Auth::id();
+
+        $path = $request->bgm->store('audios');
+        var_dump($path);
+        $quizz->bgm = $path;
 
         $quizz->save();
 

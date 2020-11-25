@@ -66,29 +66,19 @@
                 </div>
             </div>
         </div>
-
-    <audio id="BGM">
-        <source :src="quizz.backgroundAudio" type="audio/ogg">
-        Your browser does not support the audio element.
-    </audio>
-    <button onclick="playBGM()" type="button">Play Audio</button>
+    <button @click="playBGM(quizzBgm)" type="button">Play Audio</button>
 
     </div>
 </template>
 
 <script>
 
-var audioElement = document.getElementById("BGM"); 
-
-function playBGM() { 
-  audioElement.play(); 
-}
-
 import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
+
 
 export default {
         name: "PlayQuizz",
-        props: ['quizzContent'],
+        props: ['quizzContent', 'quizzBgm'],
         data: function(){
             return {
                 quizz: new OutputQuizz(),
@@ -116,6 +106,11 @@ export default {
                     item.userChoice = false;
                 });
             },
+            playBGM(path){
+                var audio = new Audio(path);
+                audio.play();
+            },
+
             /*handleProgressBar(){
                 var progress = document.getElementById("achievement");
                 progress.focus();

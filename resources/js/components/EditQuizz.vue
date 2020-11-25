@@ -2,6 +2,17 @@
     <div>
         <h1>Quizz : {{ quizz.title }}</h1>
         <input type="textbox" name="name" v-model="quizz.title" />
+
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" name="bgm" class="custom-file-input" id="inputFileUload"
+                v-on:change="onFileChange">
+                <label class="custom-file-label" for="inputFileUpload">Choose file</label>
+            </div>
+        </div>
+        <br>
+        <p class="text-danger font-weight-bold">{{filename}}</p>
+
         <ul>
             <li v-for="(item,ind) in quizz.items">
                 <h3>{{ item.question }} </h3>
@@ -46,7 +57,7 @@
         <button type="button" v-on:click="populateJson()" >Export to JSON </button>
         <input v-model="jsonExport" name="content" hidden="yes" />
         <p> {{ jsonExport }}</p>
-        <input v-on:click="populateJson()" type="submit" value="Save this quizz."/>
+        <input v-on:click="populateJson()" name="submit" type="submit" value="Save this quizz."/>
     </div>
 </template>
 
@@ -78,7 +89,12 @@ export default {
             let serializedObject = JSON.parse(text);
             Object.assign(this.quizz, serializedObject);
             this.quizz.items = this.quizz.items.map((item) => new InputQuizzItem(item.question, item.answers, item.type));
-        }
+        },
+        onFileChange(e) {
+        //console.log(e.target.files[0]);
+        this.filename = "Selected File: " + e.target.files[0].name;
+        this.file = e.target.files[0];
+        },
     }
 }
 </script>

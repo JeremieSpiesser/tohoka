@@ -26,6 +26,7 @@ class QuizzsUIController extends Controller
 
     function playQuizz($id){
         $quizz = Quizz::where('id', $id)->where('creator', Auth::id())->firstOrFail();
+        //return $quizz;
         return view('playquizz', ['quizz' => $quizz]);
     }
 }
