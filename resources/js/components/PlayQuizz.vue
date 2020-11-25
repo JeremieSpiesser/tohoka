@@ -110,9 +110,12 @@ export default {
             },
             initBGM(path){
                 this.audio = new Audio(path);
+                this.audio.loop = true;
             },
-            toggleBGM(path){
-                this.audio.play();
+            toggleBGM(){
+                  if(!this.audio.paused) this.audio.pause();
+                  else this.audio.play();
+                //this.audio.play();
             },
 
             /*handleProgressBar(){
