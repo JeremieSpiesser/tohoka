@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-    <button @click="playBGM(quizzBgm)" type="button">Play Audio</button>
+    <button @click="toggleBGM()" type="button">Play Audio</button>
 
     </div>
 </template>
@@ -85,11 +85,13 @@ export default {
                 gameFinished: false,
                 nbgoodanswers: 0,
                 nbpoints: 0,
-                score: 0
+                score: 0,
+                audio: undefined
             }
         },
         mounted() {
             this.loadQuizz(this.quizzContent);
+            this.initBGM(this.quizzBgm);
         },
         methods: {
             reset() {
@@ -106,9 +108,11 @@ export default {
                     item.userChoice = false;
                 });
             },
-            playBGM(path){
-                var audio = new Audio(path);
-                audio.play();
+            initBGM(path){
+                this.audio = new Audio(path);
+            },
+            toggleBGM(path){
+                this.audio.play();
             },
 
             /*handleProgressBar(){
