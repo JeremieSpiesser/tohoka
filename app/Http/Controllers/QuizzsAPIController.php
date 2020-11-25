@@ -17,8 +17,7 @@ class QuizzsAPIController extends Controller
         $quizz->content = request('content');
         $quizz->creator = Auth::id();
 
-        $path = $request->bgm->store('audios');
-        var_dump($path);
+        $path = $request->bgm->store('public');
         $quizz->bgm = $path;
 
         $quizz->save();
