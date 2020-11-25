@@ -50,8 +50,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Auth::routes();
 
-Route::get('/chat', function (){
-    return view('testchat');
+Route::get('/play/{id}', function ($id){
+    return view('testchat', ['id' => $id]);
 });
 
 Route::post('/message', [App\Http\Controllers\Message\PostMessageController::class, 'handle']);
@@ -69,7 +69,7 @@ Route::post('/broadcasting/auth', function (){
         });
     }
 
-    Session::put('public_room_user_id', request()->user()->id);
+    Session::put('generic_user', request()->user());
 
     return Broadcast::auth(request());
 });

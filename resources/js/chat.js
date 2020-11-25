@@ -1,7 +1,7 @@
 window.myUserId = undefined;
 window.users = [];
 
-window.Echo.join('public_room')
+window.Echo.join('room.' + window.roomId)
     .here(users => {
         console.log('Here: ' + JSON.stringify(users));
         users.forEach(user => {
