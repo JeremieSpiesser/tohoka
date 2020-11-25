@@ -17,20 +17,28 @@ class QuizzsAPIController extends Controller
         $quizz->content = request('content');
         $quizz->creator = Auth::id();
 
-        $path = $request->bgm->store('public');
-        var_dump($path);
-        $quizz->bgm = $path;
+        if ($request->bgm != null)
+        {
+            $path = $request->bgm->store('public');
+            $quizz->bgm = $path;
+        }
 
         $quizz->save();
 
         return Redirect::route('user-quizz');
     }
 
-    public function modifyQuizz($id){
+    public function modifyQuizz(Request $request, $id){
         $quizz = Quizz::where('id', $id)->where('creator', Auth::id())->firstOrFail();
 
         $quizz->name = request('name');
         $quizz->content = request('content');
+
+        if ($request->bgm != null)
+        {
+            $path = $request->bgm->store('public');
+            $quizz->bgm = $path;
+        }
 
         $quizz->save();
 
