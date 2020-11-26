@@ -16,7 +16,10 @@ class QuizzsAPIController extends Controller
         $quizz->name = request('name');
         $quizz->content = request('content');
         $quizz->creator = Auth::id();
-
+        // 2 is public, 1 is register only, 0 is private
+        $quizz->private =    request('private') == "public"     ?   2 :
+                            (request('private') == "register"   ?   1 :
+                                                                    0);
         if ($request->bgm != null)
         {
             $path = $request->bgm->store('public');
@@ -33,7 +36,9 @@ class QuizzsAPIController extends Controller
 
         $quizz->name = request('name');
         $quizz->content = request('content');
-
+        $quizz->private =    request('private') == "public"     ?   2 :
+                            (request('private') == "register"   ?   1 :
+                                                                    0);
         if ($request->bgm != null)
         {
             $path = $request->bgm->store('public');

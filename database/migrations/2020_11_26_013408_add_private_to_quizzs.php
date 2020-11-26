@@ -14,7 +14,7 @@ class AddPrivateToQuizzs extends Migration
     public function up()
     {
         Schema::table('quizzs', function (Blueprint $table) {
-            $table->boolean('private')->nullable();
+            $table->integer('private')->nullable();
         });
     }
 
