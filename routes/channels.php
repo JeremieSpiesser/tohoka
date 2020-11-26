@@ -20,7 +20,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('public_room', function ($user) {
+Broadcast::channel('room.{id}', function ($user, $id) {
     if(!User::isRegistered($user)) {
         if(!Session::has('chat_name')){
             Session::put('chat_name', 'Guest: ' . Utils::randomName());
@@ -28,7 +28,7 @@ Broadcast::channel('public_room', function ($user) {
         $user->name = Session::get('chat_name');
     }
 
-    //Log::info('User: ' . print_r($user, true));
+    Session::put('current_room', $id);
 
     return ['id' => $user->id, 'name' => $user->name];
 });
