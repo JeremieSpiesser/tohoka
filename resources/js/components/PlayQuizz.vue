@@ -115,6 +115,7 @@ export default {
             initBGM(path){
                 this.audio = new Audio(path);
                 this.audio.loop = true;
+                this.audio.volume = 0.15;
             },
             toggleBGM(){
                   if(!this.audio.paused) this.audio.pause();
