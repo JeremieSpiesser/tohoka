@@ -41,22 +41,27 @@ class QuizzsUIController extends Controller
     }
 
     function getQuizzQuestion($quizzId, $questionId){
-        $quizz = json_decode(QuizzRepository::playQuizz($id), true);
+        $quizz = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true);
 
         if (is_null($quizz["items"][$questionId]))
-            return view('errorLoadingQuestion', ['error'] => "bad question id"]);
+            return view('errorLoadingQuestion', ['error' => "bad question id"]);
 
         $answers = array();
         foreach ($quizz["items"][$questionId]["answers"] as $answer){
             $answers[] = $answer["answer"];
         }
 
+        //var_dump($quizz["items"][$questionId]["question"]);
         $question = json_encode([
-            "question" -> $quizz["items"][$questionId]["question"],
-            "answers" -> $answers,
-            "isTrue" -> $quizz["items"][$questionId]["isTrue"]
-        ])
+            "question" => $quizz["items"][$questionId]["question"],
+            "answers" => $answers,
+            "type" => $quizz["items"][$questionId]["type"]
+        ]);
 
         return view('quizzQuestion', ['question' => $question]);
+    }
+
+    function submitQuestionAnswer(){
+        return 0; // TODO
     }
 }

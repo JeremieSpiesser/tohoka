@@ -24,6 +24,9 @@ Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz
 Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
     ->name('quizz-play');
 
+Route::get('/getquizzquestion/{quizzId},{questionId}', '\App\Http\Controllers\QuizzsUIController@getQuizzQuestion')
+    ->name('quizz-play');
+
 Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
     ->middleware('auth')
     ->name('user-quizz');
@@ -39,6 +42,9 @@ Route::get('/modifyquizz/{id}', '\App\Http\Controllers\QuizzsUIController@modify
 Route::post('/savequizz','\App\Http\Controllers\QuizzsAPIController@saveQuizz')
     ->middleware('auth')
     ->name('quizz-api-save');
+
+Route::post('/submitAnswer','\App\Http\Controllers\QuizzsAPIController@submitQuestionAnswer')
+    ->name('quizz-submit-question');
 
 Route::post('/modQuizz/{id}','\App\Http\Controllers\QuizzsAPIController@modifyQuizz')
     ->middleware('auth')

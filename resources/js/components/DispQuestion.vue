@@ -1,0 +1,56 @@
+<template>
+    <div>
+    {{ question }}
+        <ul>
+            <h3>{{ question.question }} </h3>
+            <div v-if='question.type === "qcm" || question.type === "qcma"'>
+                <ul v-for="(possAnswer,index) in question.answers">
+                    <li>{{ index }} : {{ possAnswer.answer }}
+                        <input type="checkbox" v-model="possAnswer.userChoice">
+                    </li>
+                </ul>
+            </div>
+            <div v-if="question.type === 'classic'">
+                <h4>Only one answer is possible here !</h4>
+                <ul v-for="(possAnswer, index) in question.answers">
+                    <li>
+                        <!--input type="checkbox" v-model="possAnswer.userChoice" @click="item.disableOthers(possAnswer)"-->
+                        <input type="radio" v-model="question.userUniqueChoice" :value="possAnswer.answer">{{ possAnswer.answer }}</input>
+                    </li>
+                </ul>
+
+            </div>
+            <div v-if="question.type === 'tf'">
+                <input type="radio" v-model="question.userTfChoice" value="true">Vrai</input>
+                <input type="radio" v-model="question.userTfChoice" value="false">Faux</input>
+            </div>
+        </ul>
+
+        <button type="button" class="btn btn-primary" @click="toggleFinished()"> Show answers </button>
+    </div>
+</template>
+
+<script>
+
+//import {QuizzQuestion} from "../classes/quizzQuestion";
+
+
+export default {
+        name: "DispQuestoin",
+        props: ['quizzQuestion'],
+        data: function(){
+            return {
+                question: null
+            }
+        },
+        mounted() {
+            this.loadQuestion(this.quizzQuestion);
+        },
+        methods: {
+            loadQuestion(json){
+                this.question = JSON.parse(json);
+                //alert(this.question.type);
+            }
+        }
+    }
+</script>
