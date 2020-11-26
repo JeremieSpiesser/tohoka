@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Str;
 
 class QuizzsUIController extends Controller
 {
@@ -33,6 +34,9 @@ class QuizzsUIController extends Controller
     function playQuizz($id){
         $quizz = QuizzRepository::playQuizz($id);
         $quizz->bgm = Storage::url($quizz->bgm);
+        if($quizz->bgm == 'storage' || !Str::contains($quizz->bgm, '.')){
+            $quizz->bgm = "";
+        }
         return view('playquizz', ['quizz' => $quizz]);
     }
 }
