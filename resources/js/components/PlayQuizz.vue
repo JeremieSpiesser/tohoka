@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>{{ quizz.title }}</h1>
+        <button @click="toggleBGM()" type="button">Play background audio</button>
         <ul>
             <li v-for="item in quizz.items">
                 <h3  v-if="gameFinished" class="alert alert-primary" role="alert">
@@ -70,6 +71,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -77,20 +79,23 @@
 
 import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
 
+
 export default {
         name: "PlayQuizz",
-        props: ['quizzContent'],
+        props: ['quizzContent', 'quizzBgm'],
         data: function(){
             return {
                 quizz: new OutputQuizz(),
                 gameFinished: false,
                 nbgoodanswers: 0,
                 nbpoints: 0,
-                score: 0
+                score: 0,
+                audio: undefined
             }
         },
         mounted() {
             this.loadQuizz(this.quizzContent);
+            this.initBGM(this.quizzBgm);
         },
         methods: {
             reset() {
@@ -107,6 +112,16 @@ export default {
                     item.userChoice = false;
                 });
             },
+            initBGM(path){
+                this.audio = new Audio(path);
+                this.audio.loop = true;
+            },
+            toggleBGM(){
+                  if(!this.audio.paused) this.audio.pause();
+                  else this.audio.play();
+                //this.audio.play();
+            },
+
             /*handleProgressBar(){
                 var progress = document.getElementById("achievement");
                 progress.focus();
