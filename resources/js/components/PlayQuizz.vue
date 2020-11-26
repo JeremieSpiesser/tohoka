@@ -1,7 +1,14 @@
 <template>
     <div>
         <h1>{{ quizz.title }}</h1>
-        <button v-if="quizzBgm" @click="toggleBGM()" type="button">Play background audio</button>
+        <button v-if="quizzBgm" @click="toggleBGM()" type="button">
+            <span v-if="audio && !audio.paused">
+                Play background audio
+            </span>
+            <span v-else>
+                Pause background audio
+            </span>
+        </button>
         <ul>
             <li v-for="item in quizz.items">
                 <h3  v-if="gameFinished" class="alert alert-primary" role="alert">
