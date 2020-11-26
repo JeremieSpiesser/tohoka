@@ -26,19 +26,6 @@
             <li id="Questionnaire" v-for="(item,ind) in quizz.items">
                 
                 <h3>{{ item.question }} </h3>
-                <form class="form-inline">
-                <div class="form-row align-items-center">
-                    <input type="textbox" v-model="item.question" />            
-                    <input type="button"  class="btn btn-outline-danger" value="Delete." 	@click="quizz.removeItemAt(ind)">            
-                    <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
-                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="item.type">
-                        <option value="qcm">QCM sans avertissement</option>
-                        <option value="classic">Question à réponse unique</option>
-                        <option value="qcma">QCM avec avertissement</option>
-                        <option value="tf">Vrai/Faux</option>
-                    </select>
-                </div>
-                </form>
                 <div v-if="item.type === 'classic'">
                     <ul v-for="(possAnswer,index) in item.answers">
               
