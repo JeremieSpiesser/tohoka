@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-    <h1>My quizz :</h1>
+    <h1>Quizzs publics :</h1>
         @forelse ($quizzs as $quizz)
             <div class="card">
                 <div class="card-body">
