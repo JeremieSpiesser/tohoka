@@ -2,7 +2,7 @@
     <div>
         <h1>{{ quizz.title }}</h1>
         <button v-if="quizzBgm" @click="toggleBGM()" type="button">
-            <span v-if="audio && !audio.paused">
+            <span v-if="!isAudioPlaying">
                 Play background audio
             </span>
             <span v-else>
@@ -97,7 +97,8 @@ export default {
                 nbgoodanswers: 0,
                 nbpoints: 0,
                 score: 0,
-                audio: undefined
+                audio: undefined,
+                isAudioPlaying: false
             }
         },
         mounted() {
@@ -125,9 +126,13 @@ export default {
                 this.audio.volume = 0.15;
             },
             toggleBGM(){
-                  if(!this.audio.paused) this.audio.pause();
-                  else this.audio.play();
-                //this.audio.play();
+                  if(!this.audio.paused) {
+                      this.isAudioPlaying = true;
+                      this.audio.pause();
+                  }else{
+                      this.isAudioPlaying = false;
+                      this.audio.play();
+                  }
             },
 
             /*handleProgressBar(){
