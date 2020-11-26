@@ -22,7 +22,6 @@ class CreateQuizzsTable extends Migration
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
-            $table->string('bgm')->nullable();
             $table->timestamps();
         });
     }
