@@ -56,9 +56,13 @@
 
         <div class="jumbotron" v-if="gameFinished" style="background-color:#ffc107; color:white;">
             <div class="container">
-                <h1 class="display-4">Congratulations, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-if="score === 100">Congratulations, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-else-if="score > 75">Almost perfect, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-else-if="score > 50">Quite good, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-else-if="score > 25">You've got {{ nbpoints }}/{{ nbgoodanswers }}, you'll have to study a bit more ...</h1>
+                <h1 class="display-4" v-else>Uh-oh, you've only got {{ nbpoints }}/{{ nbgoodanswers }} ...</h1>
                 <div class="progress">
-                    <div id="achievement" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ score }}%</div>
+                    <div id="achievement" class="progress-bar progress-bar-striped bg-success" role="progressbar" v-bind:style="{ width: score + '%' }" style="font-weight: bold" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ score }}%</div>
                 </div><br/>
                 <hr>
                 <div class="row justify-content-center">
@@ -122,7 +126,7 @@ export default {
                     this.nbpoints += item.score;
                     this.nbgoodanswers += item.getNbGoodAnswers();
                 }
-                this.score = (this.nbpoints / this.nbgoodanswers) * 100;
+                this.score = Math.round((this.nbpoints / this.nbgoodanswers) * 100);
                 //this.handleProgressBar();
             }
         }
