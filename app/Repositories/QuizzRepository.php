@@ -27,8 +27,10 @@ class QuizzRepository
 
     public static function playQuizz($id){
         return Quizz::where('id', $id)->where(function($query) {
-            $query->where('creator', Auth::id())
-                  ->orWhere('private', '>=', (Auth::check() ? 1 : 2));
+            if(Auth::check()){
+                $query->where('creator', Auth::id());
+            }
+            $query->orWhere('private', '>=', (Auth::check() ? 1 : 2));
         })->firstOrFail();
     }
 }

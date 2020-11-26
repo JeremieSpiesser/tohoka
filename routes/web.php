@@ -22,7 +22,6 @@ Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz
     ->name('quizz-create');
 
 Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
-    ->middleware('auth')
     ->name('quizz-play');
 
 Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
