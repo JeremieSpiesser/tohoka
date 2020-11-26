@@ -1,8 +1,5 @@
 <template>
     <div>
-        <head>
-            <link rel = "stylesheet" href = "~/Desktop/ENSIIE/PIMA/project/pima-groupe4-2020-tohoka/resources/sass/app.scss">
-        </head>
         <h1 class="display-2" id = "Head">Quizz: {{ quizz.title }}</h1>
         <input type="textbox" name="name" id ="QuizTitle" placeholder="Nom du Quizz" v-model="quizz.title" />
 
@@ -24,19 +21,12 @@
 
         <ul>
             <li id="Questionnaire" v-for="(item,ind) in quizz.items">
-                
+
                 <h3>{{ item.question }} </h3>
-                <div v-if="item.type === 'classic'">
-                    <ul v-for="(possAnswer,index) in item.answers">
-              
-                        <li>  {{ index }} : {{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer" /> 
-                        Vrai ? <input type="checkbox" v-model="possAnswer.bool" @click="item.disableOthers(possAnswer)" placeholder="Correct answer ?" />  
-		            </ul>
-                </div>
                 <form class="form-inline">
                 <div class="form-row align-items-center">
                     <input type="textbox" v-model="item.question" />
-                    <input type="button"  class="btn btn-outline-danger" value="Delete." 	@click="quizz.removeItemAt(ind)">            
+                    <input type="button"  class="btn btn-outline-danger" value="Delete." 	@click="quizz.removeItemAt(ind)">
                     <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
 
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="item.type">
@@ -52,9 +42,9 @@
                     <ul v-for="(possAnswer,index) in item.answers">
 
                         <li>  {{ index }} : {{ possAnswer.answer }} </li>  <input type="textbox" v-model="possAnswer.answer" />
-                        <input type="button"  class="btn btn-outline-danger btn-sm"value="Delete" @click="item.removeItemAt(index)"/>
+                        <input type="button" class="btn btn-outline-danger btn-sm" value="Delete" @click="item.removeItemAt(index)"/>
                         Vrai ? <input type="checkbox" v-model="possAnswer.bool" @click="item.disableOthers(possAnswer)" placeholder="Correct answer ?" />
-		</ul>
+		            </ul>
                     <button type="button"  class="btn btn-outline-success btn-sm" @click="item.addPossibleAnswer()" > Add an answer </button>
                 </div>
 
@@ -65,9 +55,8 @@
                 <div v-if="item.type.includes('qcm')">
                     <ul v-for="(possAnswer,index) in item.answers">
                         <li>  {{ index }} : {{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer" />
-                                                   <input type="button" class="btn btn-outline-danger btn-sm" data-toggle="button" aria-pressed="false" value="Delete" @click="item.removeItemAt(index)"/>
+                        <input type="button" class="btn btn-outline-danger btn-sm" data-toggle="button" aria-pressed="false" value="Delete" @click="item.removeItemAt(index)"/>
                         Vrai ? <input type="checkbox" v-model="possAnswer.bool" placeholder="Correct answer ?" />
-
                     </ul>
                     <button type="button" class="btn btn-outline-success "  @click="item.addPossibleAnswer()"> Add an answer </button>
                 </div>
