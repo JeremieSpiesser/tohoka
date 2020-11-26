@@ -30,7 +30,7 @@ class QuizzsUIController extends Controller
     }
 
     function playQuizz($id){
-        $quizz = Quizz::where('id', $id)->where('creator', Auth::id())->firstOrFail();
+        $quizz = QuizzRepository::playQuizz($id);
         $quizz->bgm = Storage::url($quizz->bgm);
         return view('playquizz', ['quizz' => $quizz]);
     }
