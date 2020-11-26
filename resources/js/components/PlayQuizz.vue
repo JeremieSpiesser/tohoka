@@ -127,10 +127,10 @@ export default {
             },
             toggleBGM(){
                   if(!this.audio.paused) {
-                      this.isAudioPlaying = true;
+                      this.isAudioPlaying = false;
                       this.audio.pause();
                   }else{
-                      this.isAudioPlaying = false;
+                      this.isAudioPlaying = true;
                       this.audio.play();
                   }
             },
