@@ -3,6 +3,12 @@
         <h1>Quizz : {{ quizz.title }}</h1>
         <input type="textbox" name="name" v-model="quizz.title" />
 
+        <select v-model="private" name="private">
+            <option value="0">Privé</option>
+            <option value="1">Connecté</option>
+            <option value="2">Public</option>
+        </select>
+
         <div class="input-group">
             <div class="custom-file">
                 <input type="file" name="bgm" class="custom-file-input" id="inputFileUload"
@@ -67,7 +73,7 @@ import {InputQuizz, InputQuizzItem} from '../classes/inputQuizz';
 
 export default {
     name: "EditQuizz",
-    props: ['quizzContent'],
+    props: ['quizzContent', 'private'],
     data: function () {
         return {
             quizz: new InputQuizz("Sample quizz"),

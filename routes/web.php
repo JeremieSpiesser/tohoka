@@ -29,6 +29,9 @@ Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
     ->middleware('auth')
     ->name('user-quizz');
 
+Route::get('/allquizz', '\App\Http\Controllers\QuizzsUIController@allQuizz')
+    ->name('all-quizz');
+
 Route::get('/modifyquizz/{id}', '\App\Http\Controllers\QuizzsUIController@modifyQuizz')
     ->middleware('auth')
     ->name('quizz-modify');
