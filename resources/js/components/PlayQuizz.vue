@@ -1,13 +1,14 @@
 <template>
     <div>
         <h1>{{ quizz.title }}</h1>
+        <button @click="toggleBGM()" type="button">Play background audio</button>
         <ul>
             <li v-for="item in quizz.items">
                 <h3  v-if="gameFinished" class="alert alert-primary" role="alert">
                     {{ item.question }}<div style="text-align:right;font-style: italic;">Score : {{ item.score }}/{{ item.getNbGoodAnswers() }}</div></h3>
                 <h3  v-else>{{ item.question }} </h3>
                 <div v-if='item.type.includes("qcm")'>
-                    <h4 v-if="item.type === 'qcma' && gameFinished">Multiple answers are possible here !</h4>
+                    <h4 v-if="item.type === 'qcma' && !gameFinished">Multiple answers are possible here !</h4>
                     <ul v-for="(possAnswer,index) in item.answers">
                         <li>{{ index }} : {{ possAnswer.answer }}
                             <input type="checkbox" v-model="possAnswer.userChoice">
@@ -56,9 +57,13 @@
 
         <div class="jumbotron" v-if="gameFinished" style="background-color:#ffc107; color:white;">
             <div class="container">
-                <h1 class="display-4">Congratulations, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-if="score === 100">Congratulations, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-else-if="score > 75">Almost perfect, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-else-if="score > 50">Quite good, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
+                <h1 class="display-4" v-else-if="score > 25">You've got {{ nbpoints }}/{{ nbgoodanswers }}, you'll have to study a bit more ...</h1>
+                <h1 class="display-4" v-else>Uh-oh, you've only got {{ nbpoints }}/{{ nbgoodanswers }} ...</h1>
                 <div class="progress">
-                    <div id="achievement" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ score }}%</div>
+                    <div id="achievement" class="progress-bar progress-bar-striped bg-success" role="progressbar" v-bind:style="{ width: score + '%' }" style="font-weight: bold" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ score }}%</div>
                 </div><br/>
                 <hr>
                 <div class="row justify-content-center">
@@ -66,6 +71,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -73,20 +79,23 @@
 
 import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
 
+
 export default {
         name: "PlayQuizz",
-        props: ['quizzContent'],
+        props: ['quizzContent', 'quizzBgm'],
         data: function(){
             return {
                 quizz: new OutputQuizz(),
                 gameFinished: false,
                 nbgoodanswers: 0,
                 nbpoints: 0,
-                score: 0
+                score: 0,
+                audio: undefined
             }
         },
         mounted() {
             this.loadQuizz(this.quizzContent);
+            this.initBGM(this.quizzBgm);
         },
         methods: {
             reset() {
@@ -103,6 +112,16 @@ export default {
                     item.userChoice = false;
                 });
             },
+            initBGM(path){
+                this.audio = new Audio(path);
+                this.audio.loop = true;
+            },
+            toggleBGM(){
+                  if(!this.audio.paused) this.audio.pause();
+                  else this.audio.play();
+                //this.audio.play();
+            },
+
             /*handleProgressBar(){
                 var progress = document.getElementById("achievement");
                 progress.focus();
@@ -122,7 +141,7 @@ export default {
                     this.nbpoints += item.score;
                     this.nbgoodanswers += item.getNbGoodAnswers();
                 }
-                this.score = (this.nbpoints / this.nbgoodanswers) * 100;
+                this.score = Math.round((this.nbpoints / this.nbgoodanswers) * 100);
                 //this.handleProgressBar();
             }
         }

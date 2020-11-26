@@ -22,12 +22,14 @@ Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz
     ->name('quizz-create');
 
 Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
-    ->middleware('auth')
     ->name('quizz-play');
 
 Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
     ->middleware('auth')
     ->name('user-quizz');
+
+Route::get('/allquizz', '\App\Http\Controllers\QuizzsUIController@allQuizz')
+    ->name('all-quizz');
 
 Route::get('/modifyquizz/{id}', '\App\Http\Controllers\QuizzsUIController@modifyQuizz')
     ->middleware('auth')
@@ -50,8 +52,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Auth::routes();
 
-Route::get('/chat', function (){
-    return view('testchat');
+Route::get('/play/{id}', function ($id){
+    return view('testchat', ['id' => $id]);
 });
 
 Route::post('/message', [App\Http\Controllers\Message\PostMessageController::class, 'handle']);
@@ -69,7 +71,7 @@ Route::post('/broadcasting/auth', function (){
         });
     }
 
-    Session::put('public_room_user_id', request()->user()->id);
+    Session::put('generic_user', request()->user());
 
     return Broadcast::auth(request());
 });

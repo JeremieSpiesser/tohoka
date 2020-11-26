@@ -40,6 +40,11 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('all-quizz') }}">{{ __('Quizzs publics') }}</a>
+                        </li>
+
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Se connecter') }}</a>
@@ -55,7 +60,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user-quizz') }}">{{ __('Mes Quizz') }}</a>
+                                <a class="nav-link" href="{{ route('user-quizz') }}">{{ __('Mes Quizzs') }}</a>
                             </li>
 
                             <li class="nav-item dropdown">
