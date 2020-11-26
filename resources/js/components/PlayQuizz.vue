@@ -7,7 +7,7 @@
                     {{ item.question }}<div style="text-align:right;font-style: italic;">Score : {{ item.score }}/{{ item.getNbGoodAnswers() }}</div></h3>
                 <h3  v-else>{{ item.question }} </h3>
                 <div v-if='item.type.includes("qcm")'>
-                    <h4 v-if="item.type === 'qcma' && gameFinished">Multiple answers are possible here !</h4>
+                    <h4 v-if="item.type === 'qcma' && !gameFinished">Multiple answers are possible here !</h4>
                     <ul v-for="(possAnswer,index) in item.answers">
                         <li>{{ index }} : {{ possAnswer.answer }}
                             <input type="checkbox" v-model="possAnswer.userChoice">
