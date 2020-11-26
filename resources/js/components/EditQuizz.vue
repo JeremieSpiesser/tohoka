@@ -16,6 +16,8 @@
         <ul>
             <li v-for="(item,ind) in quizz.items">
                 <h3>{{ item.question }} </h3>
+                <p>Insert a picture if relevant </p>
+                <input type="file" on:change="handleFileUpload()" ref="file"><input type="button" value="Upload" @click="uploadImage(ind)">
                 <input type="textbox" v-model="item.question" />
                 <input type="button" value="Delete" 			@click="quizz.removeItemAt(ind)">
 
@@ -64,6 +66,8 @@
 <script>
 
 import {InputQuizz, InputQuizzItem} from '../classes/inputQuizz';
+import { Axios } from 'axios'
+
 
 export default {
     name: "EditQuizz",
@@ -71,7 +75,8 @@ export default {
     data: function () {
         return {
             quizz: new InputQuizz("Sample quizz"),
-            jsonExport: ""
+            jsonExport: "",
+            file: ''
         }
     },
     mounted: function(){
@@ -95,6 +100,32 @@ export default {
         this.filename = "Selected File: " + e.target.files[0].name;
         this.file = e.target.files[0];
         },
+        uploadImage(id){
+            let allofthem = document.querySelectorAll('input[type="file"]');
+            let theone = allofthem[id].files[0];
+            /*let axios = new Axios();*/
+            /*axios.post('/upload', post)*/
+                    /*.then(res => {*/
+                        /*commit('image', file.files[0])*/
+                    /*}).catch(err => {*/
+                        /*console.log(err)*/
+            /*})*/
+            let formData = new FormData();
+            formData.append("image",theone);
+            axios.post('upload',formData,{
+                                headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }}).then(function(e){
+                        console.log("success apparently");
+                        let res = JSON.parse(e);
+                        this.quizz.items[id] = res["filename"];
+                        console.log(e)
+                    }).catch(function(err){
+                        console.log("error");
+                        console.log(err)
+                        });
+
+        }
     }
 }
 </script>

@@ -73,3 +73,5 @@ Route::post('/broadcasting/auth', function (){
 
     return Broadcast::auth(request());
 });
+
+Route::post('/upload', [App\Http\Controllers\UploadController::class,'handleUpload'])->middleware('auth');
