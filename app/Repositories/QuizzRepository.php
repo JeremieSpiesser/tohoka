@@ -29,6 +29,6 @@ class QuizzRepository
         return Quizz::where('id', $id)->where(function($query) {
             $query->where('creator', Auth::id())
                   ->orWhere('private', '>=', (Auth::check() ? 1 : 2));
-        })->get();
+        })->firstOrFail();
     }
 }
