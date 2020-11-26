@@ -10,3 +10,6 @@
         @yield('app')
     </div>
 @endsection
+
+@section('custom-js')
+@endsection
