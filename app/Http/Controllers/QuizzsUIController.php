@@ -20,6 +20,10 @@ class QuizzsUIController extends Controller
         return view('myquizz', ['quizzs' => QuizzRepository::findByUID()]);
     }
 
+    function allQuizz(){
+        return view('allquizz', ['quizzs' => QuizzRepository::findAllQuizzs()]);
+    }
+
     function modifyQuizz($id){
         $quizz = Quizz::where('id', $id)->where('creator', Auth::id())->firstOrFail();
         return view('modifyquizz', ['quizz' => $quizz]);
