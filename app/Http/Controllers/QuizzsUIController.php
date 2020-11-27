@@ -58,7 +58,7 @@ class QuizzsUIController extends Controller
             "type" => $quizz["items"][$questionId]["type"]
         ]);
 
-        return view('quizzQuestion', ['question' => $question]);
+        return response()->json($question);
     }
 
     function submitQuestionAnswer(){

@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul>
-            <h3>question.title</h3>
+            <h3>{{ question.question }}</h3>
             <div v-if='question.type === "qcm" || question.type === "qcma"'>
                 <ul v-for="(possAnswer,index) in question.answers">
                     <li>
@@ -47,8 +47,7 @@ export default {
         },
         methods: {
             loadQuestion(json){
-                this.question = JSON.parse(json);
-                //alert(this.question.type);
+                this.question = json;
             }
         }
     }
