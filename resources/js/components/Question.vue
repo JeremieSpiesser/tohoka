@@ -43,21 +43,12 @@ export default {
             }
         },
         mounted() {
-            this.loadQuestion(this.quizzQuestion);
+            //this.loadQuestion(this.quizzQuestion);
         },
         methods: {
             loadQuestion(json){
                 this.question = JSON.parse(json);
                 //alert(this.question.type);
-            },
-
-            loadQuestion(quizzId, questionId){
-                axios.get('/getquizzquestion/18,1')
-                    .then((response)=>{
-                        document.getElementById("vuequestion").innerHTML = response.data;
-                        //document.getElementById("vuequestion").innerHTML = "<b>Coucou</b>";
-                        //this.question = response.data;
-                    })
             }
         }
     }

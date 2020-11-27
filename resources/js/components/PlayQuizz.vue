@@ -9,6 +9,7 @@
                 Pause background audio
             </span>
         </button>
+        <div id="foo"></div>
         <button @click="loadQuestion(1,1)" type="button">Load question</button>
         <question></question>
 
@@ -95,6 +96,17 @@ export default {
                 }
                 this.score = Math.round((this.nbpoints / this.nbgoodanswers) * 100);
                 //this.handleProgressBar();
+            },
+
+            loadQuestion(quizzId, questionId){
+                axios.get('/getquizzquestion/18,1')
+                    .then((response)=>{
+                        //document.getElementById("vuequestion").innerHTML = response.data;
+                        //document.getElementById("vuequestion").innerHTML = "<b>Coucou</b>";
+                        //this.question = response.data;
+                        document.getElementById("foo").innerHTML = response.data;
+                        this.$children[0].loadQuestion(response.data);
+                    })
             }
         }
     }
