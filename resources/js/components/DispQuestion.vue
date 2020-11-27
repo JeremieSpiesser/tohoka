@@ -34,9 +34,12 @@
 
 //import {QuizzQuestion} from "../classes/quizzQuestion";
 
+window.app = new Vue({
+    el: '#vuequestion',
+});
 
 export default {
-        name: "DispQuestoin",
+        name: "DispQuestion",
         props: ['quizzQuestion'],
         data: function(){
             return {

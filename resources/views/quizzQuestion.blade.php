@@ -1,4 +1,4 @@
-@extends('layouts.appvuejs')
+@extends('layouts.loadablediv')
 
 @section('app')
 <div class="container">

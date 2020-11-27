@@ -10,8 +10,7 @@
             </span>
         </button>
         <button @click="loadQuestion(1,1)" type="button">Load question</button>
-        <div id="currentQuestion">
-            {{ question }}
+        <div id="vuequestion">
         </div>
 
     </div>
@@ -97,8 +96,9 @@ export default {
             loadQuestion(quizzId, questionId){
                 axios.get('/getquizzquestion/18,1')
                     .then((response)=>{
-                        document.getElementById("currentQuestion").innerHTML = response.data;
-                        //this.question = response.data
+                        document.getElementById("vuequestion").innerHTML = response.data;
+                        //document.getElementById("vuequestion").innerHTML = "<b>Coucou</b>";
+                        //this.question = response.data;
                     })
             }
         }
