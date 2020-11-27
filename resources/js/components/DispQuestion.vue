@@ -1,12 +1,12 @@
 <template>
     <div>
-    {{ question }}
         <ul>
             <h3>{{ question.question }} </h3>
             <div v-if='question.type === "qcm" || question.type === "qcma"'>
                 <ul v-for="(possAnswer,index) in question.answers">
-                    <li>{{ index }} : {{ possAnswer.answer }}
-                        <input type="checkbox" v-model="possAnswer.userChoice">
+                    <li>
+                        <input type="checkbox" v-model="possAnswer.index">
+                        {{ possAnswer }}
                     </li>
                 </ul>
             </div>
@@ -26,7 +26,7 @@
             </div>
         </ul>
 
-        <button type="button" class="btn btn-primary" @click="toggleFinished()"> Show answers </button>
+        <button type="button" class="btn btn-primary" @click="sendAnswers()"> Send the answers </button>
     </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
         props: ['quizzQuestion'],
         data: function(){
             return {
-                question: null
+                question: 0
             }
         },
         mounted() {
