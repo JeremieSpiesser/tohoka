@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul>
-            <h3>{{ question.question }} </h3>
+            <h3>question.title</h3>
             <div v-if='question.type === "qcm" || question.type === "qcma"'>
                 <ul v-for="(possAnswer,index) in question.answers">
                     <li>
@@ -34,12 +34,8 @@
 
 //import {QuizzQuestion} from "../classes/quizzQuestion";
 
-window.app = new Vue({
-    el: '#vuequestion',
-});
-
 export default {
-        name: "DispQuestion",
+        name: "Question",
         props: ['quizzQuestion'],
         data: function(){
             return {
@@ -53,6 +49,15 @@ export default {
             loadQuestion(json){
                 this.question = JSON.parse(json);
                 //alert(this.question.type);
+            },
+
+            loadQuestion(quizzId, questionId){
+                axios.get('/getquizzquestion/18,1')
+                    .then((response)=>{
+                        document.getElementById("vuequestion").innerHTML = response.data;
+                        //document.getElementById("vuequestion").innerHTML = "<b>Coucou</b>";
+                        //this.question = response.data;
+                    })
             }
         }
     }

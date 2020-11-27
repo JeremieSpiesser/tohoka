@@ -10,8 +10,7 @@
             </span>
         </button>
         <button @click="loadQuestion(1,1)" type="button">Load question</button>
-        <div id="vuequestion">
-        </div>
+        <question></question>
 
     </div>
 </template>
@@ -20,10 +19,15 @@
 
 import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
 
+import Question from "../components/Question.vue";
+
 
 export default {
         name: "PlayQuizz",
         props: ['quizzContent', 'quizzBgm'],
+        components: {
+            Question
+        },
         data: function(){
             return {
                 quizz: new OutputQuizz(),
@@ -91,15 +95,6 @@ export default {
                 }
                 this.score = Math.round((this.nbpoints / this.nbgoodanswers) * 100);
                 //this.handleProgressBar();
-            },
-
-            loadQuestion(quizzId, questionId){
-                axios.get('/getquizzquestion/18,1')
-                    .then((response)=>{
-                        document.getElementById("vuequestion").innerHTML = response.data;
-                        //document.getElementById("vuequestion").innerHTML = "<b>Coucou</b>";
-                        //this.question = response.data;
-                    })
             }
         }
     }
