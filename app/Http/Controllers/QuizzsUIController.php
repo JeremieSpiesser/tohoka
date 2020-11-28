@@ -15,7 +15,6 @@ class QuizzsUIController extends Controller
 
     function createQuizz(){
         return view('createquizz');
-
     }
 
     function myQuizz(){
