@@ -10,7 +10,7 @@
             </span>
         </button>
         <div id="foo"></div>
-        <button @click="loadQuestion(18)" type="button">Load question</button>
+        <button @click="loadNextQuestion()" type="button">Load question</button>
         <question></question>
 
     </div>
@@ -25,7 +25,7 @@ import Question from "../components/Question.vue";
 
 export default {
         name: "PlayQuizz",
-        props: ['quizzContent', 'quizzBgm', 'quizzCount'],
+        props: ['quizzContent', 'quizzBgm', 'quizzCount', 'quizzId'],
         components: {
             Question
         },
@@ -39,12 +39,13 @@ export default {
                 audio: undefined,
                 isAudioPlaying: false,
                 questionId: 0,
-                n: 0,
+                quizz_Count: 0,
+                quizz_Id: 0,
                 question: ""
             }
         },
         mounted() {
-            this.loadQuizz(this.quizzContent, this.quizzCount);
+            this.loadQuizz(this.quizzContent, this.quizzCount, this.quizzId);
             this.initBGM(this.quizzBgm);
         },
         methods: {
@@ -53,9 +54,10 @@ export default {
                 this.nbpoints = 0;
                 this.score = 0;
             },
-            loadQuizz(text, count){
+            loadQuizz(text, count, quizz_Id){
                 this.reset();
                 this.n = count;
+                this.quizz_Id = quizz_Id;
                 console.log("Corresponding json :" + text);
                 Object.assign(this.quizz, JSON.parse(text));
                 this.quizz.items = this.quizz.items.map((item) => new OutputQuizzItem(item.question, item.answers, item.type));
@@ -101,10 +103,10 @@ export default {
                 //this.handleProgressBar();
             },
 
-            loadQuestion(quizzId){
+            loadNextQuestion(){
                 if (this.questionId < this.n)
                 {
-                    axios.get('/getquizzquestion/' + quizzId + ',' + this.questionId)
+                    axios.get('/getquizzquestion/' + this.quizzId + ',' + this.questionId)
                         .then((response)=>{
                             this.$children[0].loadQuestion(JSON.parse(response.data));
                         })
