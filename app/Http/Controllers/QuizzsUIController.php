@@ -37,6 +37,7 @@ class QuizzsUIController extends Controller
         if($quizz->bgm == 'storage' || !Str::contains($quizz->bgm, '.')){
             $quizz->bgm = "";
         }
+        $quizz->count = count(json_decode($quizz['content'], true)['items']);
         return view('playquizz', ['quizz' => $quizz]);
     }
 
