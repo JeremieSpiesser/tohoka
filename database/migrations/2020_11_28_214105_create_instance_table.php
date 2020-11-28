@@ -14,18 +14,19 @@ class CreateInstanceTable extends Migration
     public function up()
     {
         Schema::create('instance', function (Blueprint $table) {
-            $table->unsignedBigInteger('id'); // We don't want id here because it's autoincrement and we only want 6 random digits id
+            $table->unsignedBigInteger('id')->unique(); // We don't want id here because it's autoincrement and we only want 6 random digits id
             $table->unsignedBigInteger('master');
-            $table->foreign('master')
-                  ->references('id')
-                  ->on('users');
             $table->unsignedBigInteger('idQuizz');
-            $table->foreign('idQuizz')
-                  ->references('id')
-                  ->on('quizzs');
             $table->integer('currentQuestion')  // -1 means not started
                   ->default(-1);                // (-2 means finished ?)
             $table->timestamps();
+
+            $table->foreign('master')
+                  ->references('id')
+                  ->on('users');
+            $table->foreign('idQuizz')
+                  ->references('id')
+                  ->on('quizzs');
         });
     }
 
