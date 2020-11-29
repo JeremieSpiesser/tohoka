@@ -9,6 +9,8 @@ class Answers extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'idInstance',
         'idPlayer',
