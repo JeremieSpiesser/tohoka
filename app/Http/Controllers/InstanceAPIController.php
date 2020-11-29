@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Repositories\QuizzRepository;
+use App\Repositories\InstanceRepository;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Instance;
 use Illuminate\Http\Request;
 
@@ -11,7 +15,7 @@ class InstanceAPIController extends Controller
         $instance = new Instance();
 
         try{
-            playQuizz(Auth::id());
+            QuizzRepository::playQuizz(Auth::id());
         }
         catch (Illuminate\Database\Eloquent\ModelNotFoundException $e){
             echo $e->msg;
@@ -20,11 +24,10 @@ class InstanceAPIController extends Controller
 
         do{
             $id = rand(0, 999999);
-        }
-        while (!InstanceRepository::idIsUnused($id))
+        } while (!InstanceRepository::idIsUnused($id));
 
         $instance->master = Auth::id();
-        $instance->idQuizz = $request->post('idQuizz');
+        $instance->idQuizz = $request->get('idQuizz');
         $instance->id = $id;
 
         $instance->save();
@@ -42,7 +45,6 @@ class InstanceAPIController extends Controller
             return "Instance already launched";
             break;
         case false:
-            continue;
             break;
         default:
             return "Unknown error";
@@ -51,5 +53,9 @@ class InstanceAPIController extends Controller
         return Instance::where('id', $request->post('id'))
             ->update(['currentQuestion' => 0])
             ->count() == 1;
+    }
+
+    public function joinInstance(){
+        return view('joinInstance');
     }
 }

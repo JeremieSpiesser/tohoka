@@ -30,7 +30,7 @@ class QuizzsUIController extends Controller
         return view('modifyquizz', ['quizz' => $quizz]);
     }
 
-    function playQuizz($id){
+    static function playQuizz($id){
         $quizz = QuizzRepository::playQuizz($id);
         $quizz->bgm = Storage::url($quizz->bgm);
         if($quizz->bgm == 'storage' || !Str::contains($quizz->bgm, '.')){

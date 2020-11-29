@@ -31,9 +31,21 @@ Route::get('/registerPlayer', '\App\Http\Controllers\AnswersAPIController@regist
     ->middleware('auth')
     ->name('register-player');
 
-Route::get('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@registerAnswer')
+Route::post('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@registerAnswer')
     ->middleware('auth')
     ->name('register-answer');
+
+Route::post('/registerToInstance', '\App\Http\Controllers\AnswersAPIController@registerToInstance')
+    ->middleware('auth')
+    ->name('register-to-instance');
+
+Route::get('/createInstance', '\App\Http\Controllers\InstanceAPIController@createInstance')
+    ->middleware('auth')
+    ->name('create-instance');
+
+Route::get('/joinInstance', '\App\Http\Controllers\InstanceAPIController@joinInstance')
+    ->middleware('auth')
+    ->name('join-instance');
 
 Route::get('/registerInstance', '\App\Http\Controllers\InstancesAPIController@registerInstance')
     ->middleware('auth')

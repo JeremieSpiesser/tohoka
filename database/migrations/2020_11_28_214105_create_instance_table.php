@@ -13,7 +13,7 @@ class CreateInstanceTable extends Migration
      */
     public function up()
     {
-        Schema::create('instance', function (Blueprint $table) {
+        Schema::create('instances', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->unique(); // We don't want id here because it's autoincrement and we only want 6 random digits id
             $table->unsignedBigInteger('master');
             $table->unsignedBigInteger('idQuizz');
@@ -37,6 +37,6 @@ class CreateInstanceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('instance');
+        Schema::dropIfExists('instances');
     }
 }

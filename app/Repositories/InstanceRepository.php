@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Core\App;
 use App\Models\Quizz;
+use App\Models\Instance;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -21,5 +22,11 @@ class InstanceRepository
     public static function instanceIsLaunched($id){
         $instance = Instance::where('id', $id)->first();
         return is_null($instance) ? -1 : ($instance->currentQuestion > -1);
+    }
+
+    public static function getQuizzId($id){
+        return Instance::select('idQuizz')
+            ->where('id', $id)
+            ->first()->idQuizz;
     }
 }

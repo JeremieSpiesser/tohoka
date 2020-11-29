@@ -20,7 +20,7 @@ class CreateAnswersTable extends Migration
 
             $table->foreign('idInstance')
                   ->references('id')
-                  ->on('instance');
+                  ->on('instances');
             $table->foreign('idPlayer')
                   ->references('id')
                   ->on('users');
