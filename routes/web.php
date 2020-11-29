@@ -35,6 +35,10 @@ Route::get('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@regist
     ->middleware('auth')
     ->name('register-answer');
 
+Route::get('/registerInstance', '\App\Http\Controllers\InstancesAPIController@registerInstance')
+    ->middleware('auth')
+    ->name('register-instance');
+
 Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
     ->middleware('auth')
     ->name('user-quizz');

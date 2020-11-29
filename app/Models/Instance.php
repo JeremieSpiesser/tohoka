@@ -10,6 +10,7 @@ class Instance extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'master',
         'idQuizz',
         'currentQuestion'
