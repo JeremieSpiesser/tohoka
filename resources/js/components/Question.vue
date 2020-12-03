@@ -21,8 +21,8 @@
 
             </div>
             <div v-if="question.type === 'tf'">
-                <input type="radio" v-model="userChoice[0]" value="true">Vrai</input>
-                <input type="radio" v-model="userChoice[0]" value="false">Faux</input>
+                <input type="radio" v-model="userChoice[0]" v-bind:value="true">Vrai</input>
+                <input type="radio" v-model="userChoice[0]" v-bind:value="false">Faux</input>
             </div>
         </ul>
     {{ userChoice }}
@@ -53,7 +53,7 @@ export default {
             },
 
             fillJson(){
-                return JSON.stringify(this.userChoice); // TODO : get the results and build the json
+                return JSON.stringify(this.userChoice);
             }
         }
     }
