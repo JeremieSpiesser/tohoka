@@ -24,7 +24,12 @@ class AnswersAPIController extends Controller
     }
 
     public function registerAnswer(Request $request){
-        $answer = AnswerRepository::getPlayerAnswer($request->get('idInstance'), Auth::id())['content'];
-        var_dump($answer);
+        $answer = AnswerRepository::getPlayerAnswer($request->post('idInstance'), Auth::id())['content'];
+
+        $array = json_decode($answer, true);
+        $array[] = json_decode($request->post('answer'));
+
+        $answer = json_encode($array);
+        AnswerRepository::updateAnswer($request->post('idInstance'), Auth::id(), $answer);
     }
 }

@@ -15,9 +15,15 @@ use Illuminate\Support\Facades\Auth;
 class AnswerRepository
 {
     public static function getPlayerAnswer($idInstance, $idPlayer){
-        return Quizz::select('answers')
+        return Answers::select('answers')
             ->where('idInstance', $idInstance)
             ->where('idPlayer', $idPlayer)
             ->get();
+    }
+
+    public static function updateAnswer($idInstance, $idPlayer, $newAnswer){
+        return Answers::update(['answers' => $newAnswer])
+            ->where('idInstance', $idInstance)
+            ->where('idPlayer', $idPlayer);
     }
 }
