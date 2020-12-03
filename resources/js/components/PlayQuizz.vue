@@ -107,7 +107,7 @@ export default {
                 });
 
                 // TODO : if ok
-                loadNextQuestion();
+                this.loadNextQuestion();
             }
         }
     }

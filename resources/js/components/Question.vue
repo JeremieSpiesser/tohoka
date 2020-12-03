@@ -53,7 +53,7 @@ export default {
             },
 
             fillJson(){
-                return ret; // TODO : get the results and build the json
+                return JSON.stringify(this.userChoice); // TODO : get the results and build the json
             }
         }
     }
