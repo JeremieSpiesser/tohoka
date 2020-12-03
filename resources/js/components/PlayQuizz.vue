@@ -11,7 +11,6 @@
         </button>
         <button @click="loadNextQuestion()" type="button">Load question</button>
         <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
-            <input hidden name="idInstance" :value="idInstance">
             <question></question>
             <button type="submit" class="btn btn-primary"> Send</button>
         </form>

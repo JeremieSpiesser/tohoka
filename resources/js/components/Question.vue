@@ -25,8 +25,6 @@
                 <input type="radio" v-model="question.userTfChoice" value="false">Faux</input>
             </div>
         </ul>
-
-        <input hidden name="answer" :value="answer">
     </div>
 </template>
 
@@ -52,8 +50,7 @@ export default {
             },
 
             fillJson(){
-                this.answer = '{ "" : [1, 2]}'
-                return this.answer;
+                return ''; // TODO : get the results and build the json
             }
         }
     }
