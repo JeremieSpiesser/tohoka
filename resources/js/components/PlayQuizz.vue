@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ quizzContent.title }}</h1>
+        <h1>{{ content.title }}</h1>
         <button v-if="quizzBgm" @click="toggleBGM()" type="button">
             <span v-if="!isAudioPlaying">
                 Play background audio
@@ -41,7 +41,8 @@ export default {
                 audio: undefined,
                 isAudioPlaying: false,
                 questionId: 0,
-                question: ""
+                question: "",
+                content: 0
             }
         },
         mounted() {
@@ -59,7 +60,7 @@ export default {
                 this.n = count;
                 this.quizz_Id = quizz_Id;
                 this.idInstance = idInstance;
-                this.quizzContent = JSON.parse(this.quizzContent);
+                this.content = JSON.parse(this.quizzContent);
                 console.log("Corresponding json :" + text);
                 //Object.assign(this.quizz, JSON.parse(text));
                 //this.quizz.items = this.quizz.items.map((item) => new OutputQuizzItem(item.question, item.answers, item.type));
@@ -104,6 +105,9 @@ export default {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
                 });
+
+                // TODO : if ok
+                loadNextQuestion();
             }
         }
     }

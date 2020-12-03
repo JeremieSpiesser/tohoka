@@ -5,7 +5,7 @@
             <div v-if='question.type === "qcm" || question.type === "qcma"'>
                 <ul v-for="(possAnswer,index) in question.answers">
                     <li>
-                        <input type="checkbox" v-model="possAnswer.index">
+                        <input type="checkbox" v-model="userChoice[index]">
                         {{ possAnswer }}
                     </li>
                 </ul>
@@ -15,16 +15,17 @@
                 <ul v-for="(possAnswer, index) in question.answers">
                     <li>
                         <!--input type="checkbox" v-model="possAnswer.userChoice" @click="item.disableOthers(possAnswer)"-->
-                        <input type="radio" v-model="question.userUniqueChoice" :value="possAnswer.answer">{{ possAnswer.answer }}</input>
+                        <input type="radio" v-model="userChoice[0]" :value="index">{{ possAnswer }}</input>
                     </li>
                 </ul>
 
             </div>
             <div v-if="question.type === 'tf'">
-                <input type="radio" v-model="question.userTfChoice" value="true">Vrai</input>
-                <input type="radio" v-model="question.userTfChoice" value="false">Faux</input>
+                <input type="radio" v-model="userChoice[0]" value="true">Vrai</input>
+                <input type="radio" v-model="userChoice[0]" value="false">Faux</input>
             </div>
         </ul>
+    {{ userChoice }}
     </div>
 </template>
 
@@ -38,6 +39,7 @@ export default {
         data: function(){
             return {
                 question: 0,
+                userChoice: [],
                 answer: ""
             }
         },
@@ -46,11 +48,12 @@ export default {
         },
         methods: {
             loadQuestion(json){
+                this.userChoice = []
                 this.question = json;
             },
 
             fillJson(){
-                return ''; // TODO : get the results and build the json
+                return ret; // TODO : get the results and build the json
             }
         }
     }
