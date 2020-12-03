@@ -30,7 +30,7 @@ class QuizzsUIController extends Controller
         return view('modifyquizz', ['quizz' => $quizz]);
     }
 
-    static function playQuizz($id){
+    static function playQuizz($id, int $idInstance = -1){
         $quizz = QuizzRepository::playQuizz($id);
         $quizz->bgm = Storage::url($quizz->bgm);
         if($quizz->bgm == 'storage' || !Str::contains($quizz->bgm, '.')){
@@ -38,6 +38,8 @@ class QuizzsUIController extends Controller
         }
         $quizz->number = count(json_decode($quizz['content'], true)['items']);
         $quizz->id = $quizz['id'];
+        if ($idInstance > -1)
+            $quizz->idInstance = $idInstance;
         return view('playquizz', ['quizz' => $quizz]);
     }
 

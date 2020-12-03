@@ -25,7 +25,7 @@ import Question from "../components/Question.vue";
 
 export default {
         name: "PlayQuizz",
-        props: ['quizzContent', 'quizzBgm', 'quizzCount', 'quizzId'],
+        props: ['quizzContent', 'quizzBgm', 'quizzCount', 'quizzId', 'idInstance'],
         components: {
             Question
         },
@@ -41,11 +41,12 @@ export default {
                 questionId: 0,
                 quizz_Count: 0,
                 quizz_Id: 0,
+                idInstance: -1,
                 question: ""
             }
         },
         mounted() {
-            this.loadQuizz(this.quizzContent, this.quizzCount, this.quizzId);
+            this.loadQuizz(this.quizzContent, this.quizzCount, this.quizzId, this.idInstance);
             this.initBGM(this.quizzBgm);
         },
         methods: {
@@ -54,10 +55,11 @@ export default {
                 this.nbpoints = 0;
                 this.score = 0;
             },
-            loadQuizz(text, count, quizz_Id){
+            loadQuizz(text, count, quizz_Id, idInstance){
                 this.reset();
                 this.n = count;
                 this.quizz_Id = quizz_Id;
+                this.idInstance = idInstance;
                 console.log("Corresponding json :" + text);
                 Object.assign(this.quizz, JSON.parse(text));
                 this.quizz.items = this.quizz.items.map((item) => new OutputQuizzItem(item.question, item.answers, item.type));

@@ -12,15 +12,13 @@ class AnswersAPIController extends Controller
     public function registerToInstance(Request $request){
         $answer = new Answers();
 
-        //$answer->idInstance = registerToInstance($request->get('idInstance')); TODO : implement registerToInstance function to check authorizatoin
         $answer->idInstance = $request->post('idInstance');
         $answer->idPlayer = Auth::id();
-        //$answer->answers = $request->post('answers');
 
         $answer->timestamps = false;
         $answer->save();
 
-        return QuizzsUIController::playquizz(InstanceRepository::getQuizzId($request->post('idInstance')));
+        return QuizzsUIController::playquizz(InstanceRepository::getQuizzId($request->post('idInstance')), $request->post('idInstance'));
     }
 
     public function registerAnswer(Request $request){

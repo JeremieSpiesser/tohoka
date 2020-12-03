@@ -43,7 +43,7 @@ Route::get('/createInstance', '\App\Http\Controllers\InstanceAPIController@creat
     ->middleware('auth')
     ->name('create-instance');
 
-Route::get('/joinInstance', '\App\Http\Controllers\InstanceAPIController@joinInstance')
+Route::get('/play', '\App\Http\Controllers\InstanceAPIController@joinInstance')
     ->middleware('auth')
     ->name('join-instance');
 
