@@ -5,8 +5,9 @@ namespace App\Repositories;
 
 
 use App\Core\App;
-use App\Models\Quizz;
+use App\Models\Answers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class AnswerRepository
@@ -18,12 +19,13 @@ class AnswerRepository
         return Answers::select('answers')
             ->where('idInstance', $idInstance)
             ->where('idPlayer', $idPlayer)
-            ->get();
+            ->first();
     }
 
     public static function updateAnswer($idInstance, $idPlayer, $newAnswer){
-        return Answers::update(['answers' => $newAnswer])
+        return DB::table('answers')
             ->where('idInstance', $idInstance)
-            ->where('idPlayer', $idPlayer);
+            ->where('idPlayer', $idPlayer)
+            ->update(['answers' => $newAnswer]);
     }
 }

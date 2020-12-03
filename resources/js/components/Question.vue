@@ -26,7 +26,7 @@
             </div>
         </ul>
 
-        <button type="button" class="btn btn-primary" @click="sendAnswers()"> Send the answers </button>
+        <input hidden name="answer" :value="answer">
     </div>
 </template>
 
@@ -39,7 +39,8 @@ export default {
         props: ['quizzQuestion'],
         data: function(){
             return {
-                question: 0
+                question: 0,
+                answer: ""
             }
         },
         mounted() {
@@ -48,6 +49,11 @@ export default {
         methods: {
             loadQuestion(json){
                 this.question = json;
+            },
+
+            fillJson(){
+                this.answer = '{ "" : [1, 2]}'
+                return this.answer;
             }
         }
     }

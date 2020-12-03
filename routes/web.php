@@ -31,6 +31,9 @@ Route::get('/registerPlayer', '\App\Http\Controllers\AnswersAPIController@regist
     ->middleware('auth')
     ->name('register-player');
 
+Route::get('/foo', '\App\Http\Controllers\AnswersAPIController@foo')
+    ->name('foo');
+
 Route::post('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@registerAnswer')
     ->middleware('auth')
     ->name('register-answer');

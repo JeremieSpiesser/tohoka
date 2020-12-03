@@ -9,9 +9,12 @@
                 Pause background audio
             </span>
         </button>
-        <div id="foo"></div>
         <button @click="loadNextQuestion()" type="button">Load question</button>
-        <question></question>
+        <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
+            <input hidden name="idInstance" :value="idInstance">
+            <question></question>
+            <button type="submit" class="btn btn-primary"> Send</button>
+        </form>
 
     </div>
 </template>
@@ -39,9 +42,6 @@ export default {
                 audio: undefined,
                 isAudioPlaying: false,
                 questionId: 0,
-                quizz_Count: 0,
-                quizz_Id: 0,
-                idInstance: -1,
                 question: ""
             }
         },
@@ -114,6 +114,19 @@ export default {
                         })
                     this.questionId += 1;
                 }
+            },
+
+            sendAnswer(){
+                const formData = new FormData();
+                formData.append('answer', this.$children[0].fillJson());
+                formData.append('idInstance', this.idInstance);
+
+                const res = /*await*/ axios.post('registerAnswer', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
             }
         }
     }
