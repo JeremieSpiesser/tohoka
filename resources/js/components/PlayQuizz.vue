@@ -98,6 +98,7 @@ export default {
                 const formData = new FormData();
                 formData.append('answer', this.$children[0].fillJson());
                 formData.append('idInstance', this.idInstance);
+                formData.append('idQuestion', this.questionId-1);
 
                 const res = /*await*/ axios.post('registerAnswer', formData, {
                     headers: {

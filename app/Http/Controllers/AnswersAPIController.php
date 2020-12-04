@@ -32,7 +32,7 @@ class AnswersAPIController extends Controller
             ->answers;
 
         $array = json_decode($answer, true);
-        array_push($array, json_decode($request->post('answer'), true));
+        $array[$request->post('idQuestion')] = json_decode($request->post('answer'), true);
 
         $answer = json_encode($array);
         AnswerRepository::updateAnswer($request->post('idInstance'), Auth::id(), $answer);
