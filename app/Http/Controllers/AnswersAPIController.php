@@ -12,13 +12,11 @@ use Illuminate\Support\Facades\DB;
 class AnswersAPIController extends Controller
 {
     public function registerToInstance(Request $request){
-        $answer = new Answers();
-
-        $answer->idInstance = $request->post('idInstance');
-        $answer->idPlayer = Auth::id();
-
-        $answer->timestamps = false;
-        $answer->save();
+        DB::table('answers')
+            ->updateOrInsert(
+                ['idInstance' => $request->post('idInstance'), 'idPlayer' => Auth::id()],
+                ['answers' => '{}']
+            );
 
         return QuizzsUIController::playquizz(InstanceRepository::getQuizzId($request->post('idInstance')), $request->post('idInstance'));
     }
