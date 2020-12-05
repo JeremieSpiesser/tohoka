@@ -106,7 +106,7 @@ export default {
             })
             .then(function (response) {
                 // Success
-                this.loadNextQuestion();
+                that.loadNextQuestion();
             })
             .catch(function (error){
                 if (error.response){

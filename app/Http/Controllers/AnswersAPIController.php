@@ -24,10 +24,10 @@ class AnswersAPIController extends Controller
     public function registerAnswer(Request $request){
 
         $instanceId = $request->post('idInstance');
-        $questionId = $request->post('questionId');
+        $questionId = $request->post('idQuestion');
 
         if (!InstanceRepository::canAcceptAnswer($instanceId, $questionId))
-            return response()->json(['message' => 'You can\'t respond to this question right now!'], 403);
+            return response()->json(['message' => "You can't respond to this question right now!"], 403);
 
         $answer = DB::table('answers')
             ->select('answers')
