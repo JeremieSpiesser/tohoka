@@ -42,6 +42,10 @@ Route::post('/registerToInstance', '\App\Http\Controllers\AnswersAPIController@r
     ->middleware('auth')
     ->name('register-to-instance');
 
+Route::post('/openNextQuestion', '\App\Http\Controllers\InstanceAPIController@openNextQuestion')
+    ->middleware('auth')
+    ->name('open-next-question');
+
 Route::get('/createInstance', '\App\Http\Controllers\InstanceAPIController@createInstance')
     ->middleware('auth')
     ->name('create-instance');

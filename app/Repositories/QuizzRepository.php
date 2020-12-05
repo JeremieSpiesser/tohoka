@@ -9,7 +9,6 @@ use App\Models\Quizz;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-$DEFAULT_QUESTION_DURATION = 15;
 
 /**
  * Class QuizzRepository
@@ -39,8 +38,10 @@ class QuizzRepository
 
     public static function getQuestionDuration($quizzId, $questionId)
     {
-        $duration = json_decode(playQuizz($id)['content'], true)['items'][$questionId]['duration'];
+        $question = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true)['items'][$questionId];
+        $duration = $question['duration'] ?? -1;
 
-        return $duration >= 1 ? $duration : $GLOBALS['DEFAULT_QUESTION_DURATION'];
+        //return $duration >= 1 ? $duration : $GLOBALS['DEFAULT_QUESTION_DURATION'];
+        return $duration >= 1 ? $duration : config('global.DEFAULT_QUESTION_DURATION');
     }
 }

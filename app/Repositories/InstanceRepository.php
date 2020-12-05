@@ -41,30 +41,28 @@ class InstanceRepository
     public static function checkInstanceOwner($idInstance, $idUser){
         return DB::table('instances')
             ->select('master')
-            ->where('id', $id)
+            ->where('id', $idInstance)
             ->first()->master === $idUser;
     }
 
     public static function blockAnswers($id){
-        $question = getCurrentQuestion($id);
+        $question = InstanceRepository::getCurrentQuestion($id);
 
         return Instance::where('id', $id)
-            ->update(['currentQuestion' => -1-$question])
-            ->count() == 1;
+            ->update(['currentQuestion' => -1-$question]) == 1;
     }
 
     public static function openNextQuestion($id){
-        $question = getCurrentQuestion($id);
+        $question = InstanceRepository::getCurrentQuestion($id);
 
         return Instance::where('id', $id)
-            ->update(['currentQuestion' => -$question])
-            ->count() == 1;
+            ->update(['currentQuestion' => -$question]) == 1;
     }
 
     public static function getNextQuestionDuration($id){
-        $question = -getCurrentQuestion($id);
+        $question = -InstanceRepository::getCurrentQuestion($id);
 
-        return QuizzRepository::getQuestionDuration(getQuizzId($id), $question);
+        return QuizzRepository::getQuestionDuration(InstanceRepository::getQuizzId($id), $question);
     }
 
 

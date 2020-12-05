@@ -32,7 +32,7 @@ class InstanceAPIController extends Controller
 
         $instance->save();
 
-        return $id;
+        return view('manageInstance', ['id' => $id]);
     }
 
     public function launchInstance(Request $request){
@@ -65,7 +65,7 @@ class InstanceAPIController extends Controller
         if (!InstanceRepository::checkInstanceOwner($id, Auth::id()))
             return "Unauthorized";
 
-        $duration = InstanceRepository::getQuestionDuration($id);
+        $duration = InstanceRepository::getNextQuestionDuration($id);
         InstanceRepository::openNextQuestion($id);
         sleep($duration);
         InstanceRepository::blockAnswers($id);

@@ -27,109 +27,104 @@ import Question from "../components/Question.vue";
 
 
 export default {
-        name: "PlayQuizz",
-        props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance'],
-        components: {
-            Question
+    name: "PlayQuizz",
+    props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance'],
+    components: {
+        Question
+    },
+    data: function(){
+        return {
+            //quizz: new OutputQuizz(),
+            gameFinished: false,
+            nbgoodanswers: 0,
+            nbpoints: 0,
+            score: 0,
+            audio: undefined,
+            isAudioPlaying: false,
+            questionId: 0,
+            question: "",
+            content: 0,
+            sendFeedback: ""
+        }
+    },
+    mounted() {
+        this.loadQuizz(this.quizzContent, this.quizzCount, this.idInstance);
+        this.initBGM(this.quizzBgm);
+    },
+    methods: {
+        reset() {
+            this.nbgoodanswers = 0;
+            this.nbpoints = 0;
+            this.score = 0;
         },
-        data: function(){
-            return {
-                //quizz: new OutputQuizz(),
-                gameFinished: false,
-                nbgoodanswers: 0,
-                nbpoints: 0,
-                score: 0,
-                audio: undefined,
-                isAudioPlaying: false,
-                questionId: 0,
-                question: "",
-                content: 0,
-                sendFeedback: ""
+        loadQuizz(text, count, idInstance){
+            this.reset();
+            this.n = count;
+            this.idInstance = idInstance;
+            this.content = JSON.parse(this.quizzContent);
+            console.log("Corresponding json :" + text);
+        },
+        initBGM(path){
+            this.audio = new Audio(path);
+            this.audio.loop = true;
+            this.audio.volume = 0.15;
+        },
+        toggleBGM(){
+              if(!this.audio.paused) {
+                  this.isAudioPlaying = false;
+                  this.audio.pause();
+              }else{
+                  this.isAudioPlaying = true;
+                  this.audio.play();
+              }
+        },
+
+        loadNextQuestion(){
+            if (this.questionId < this.n)
+            {
+                axios.get('/getquizzquestion/' + this.idInstance + ',' + this.questionId)
+                    .then((response)=>{
+                        this.$children[0].loadQuestion(JSON.parse(response.data));
+                    })
+                this.questionId += 1;
             }
         },
-        mounted() {
-            this.loadQuizz(this.quizzContent, this.quizzCount, this.idInstance);
-            this.initBGM(this.quizzBgm);
-        },
-        methods: {
-            reset() {
-                this.nbgoodanswers = 0;
-                this.nbpoints = 0;
-                this.score = 0;
-            },
-            loadQuizz(text, count, idInstance){
-                this.reset();
-                this.n = count;
-                this.idInstance = idInstance;
-                this.content = JSON.parse(this.quizzContent);
-                console.log("Corresponding json :" + text);
-                //Object.assign(this.quizz, JSON.parse(text));
-                //this.quizz.items = this.quizz.items.map((item) => new OutputQuizzItem(item.question, item.answers, item.type));
-                //this.quizz.items.forEach(function(item){
-                //    item.userChoice = false;
-                //});
-            },
-            initBGM(path){
-                this.audio = new Audio(path);
-                this.audio.loop = true;
-                this.audio.volume = 0.15;
-            },
-            toggleBGM(){
-                  if(!this.audio.paused) {
-                      this.isAudioPlaying = false;
-                      this.audio.pause();
-                  }else{
-                      this.isAudioPlaying = true;
-                      this.audio.play();
-                  }
-            },
 
-            loadNextQuestion(){
-                if (this.questionId < this.n)
-                {
-                    axios.get('/getquizzquestion/' + this.idInstance + ',' + this.questionId)
-                        .then((response)=>{
-                            this.$children[0].loadQuestion(JSON.parse(response.data));
-                        })
-                    this.questionId += 1;
+        sendAnswer(){
+            const formData = new FormData();
+            formData.append('answer', this.$children[0].fillJson());
+            formData.append('idInstance', this.idInstance);
+            formData.append('idQuestion', this.questionId-1);
+
+            let that = this;
+
+            const res = /*await*/ axios.post('registerAnswer', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
-            },
-
-            sendAnswer(){
-                const formData = new FormData();
-                formData.append('answer', this.$children[0].fillJson());
-                formData.append('idInstance', this.idInstance);
-                formData.append('idQuestion', this.questionId-1);
-
-                let that = this;
-
-                const res = /*await*/ axios.post('registerAnswer', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(function (response) {
-                    // Success
-                    this.loadNextQuestion();
-                })
-                .catch(function (error){
-                    if (error.response){
-                        // Out of 2xx
-                        var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
-                        that.sendFeedback = errMessage;
-                        console.log(errMessage);
-                    }
-                    else if (error.request){
-                        // No response
-                        console.log("Error sending the answer");
-                    }
-                    else {
-                        console.log('Unknown error');
-                        // Unknow error
-                    }
-                });
-            }
+            })
+            .then(function (response) {
+                // Success
+                this.loadNextQuestion();
+            })
+            .catch(function (error){
+                if (error.response){
+                    // Out of 2xx
+                    var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
+                    that.sendFeedback = errMessage;
+                    console.log(errMessage);
+                }
+                else if (error.request){
+                    // No response
+                    console.log("Error sending the answer");
+                }
+                else {
+                    console.log('Unknown error');
+                    // Unknow error
+                }
+            });
         }
     }
+}
 </script>
