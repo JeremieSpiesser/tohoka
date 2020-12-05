@@ -51,7 +51,7 @@ class InstanceAPIController extends Controller
         }
 
         return Instance::where('id', $request->post('id'))
-            ->update(['currentQuestion' => 0])
+            ->update(['currentQuestion' => -1])
             ->count() == 1;
     }
 
