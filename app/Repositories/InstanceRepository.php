@@ -31,11 +31,15 @@ class InstanceRepository
             ->first()->idQuizz;
     }
 
-    public static function blockAnswers($id){
-        $question = DB::table('instances')
+    public static function getCurrentQuestion($id){
+        return DB::table('instances')
             ->select('currentQuestion')
             ->where('id', $id)
-            ->first();
+            ->first()->currentQuestion;
+    }
+
+    public static function blockAnswers($id){
+        $question = getCurrentQuestion($id);
 
         return Instance::where('id', $id)
             ->update(['currentQuestion' => -1-$question])
@@ -43,10 +47,7 @@ class InstanceRepository
     }
 
     public static function openNextQuestion($id){
-        $question = DB::table('instances')
-            ->select('currentQuestion')
-            ->where('id', $id)
-            ->first();
+        $question = getCurrentQuestion($id);
 
         return Instance::where('id', $id)
             ->update(['currentQuestion' => -$question])

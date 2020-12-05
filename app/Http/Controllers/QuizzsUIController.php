@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quizz;
 use App\Repositories\QuizzRepository;
+use App\Repositories\InstanceRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,13 +38,19 @@ class QuizzsUIController extends Controller
             $quizz->bgm = "";
         }
         $quizz->number = count(json_decode($quizz['content'], true)['items']);
-        $quizz->id = $quizz['id'];
         if ($idInstance > -1)
             $quizz->idInstance = $idInstance;
         return view('playquizz', ['quizz' => $quizz]);
     }
 
-    function getQuizzQuestion($quizzId, $questionId){
+    function getQuizzQuestion($instanceId, $questionId){
+
+        $quizzId = InstanceRepository::getQuizzId($instanceId);
+        $currentQuestion = InstanceRepository::getCurrentQuestion($instanceId);
+
+        if ($questionId+1 != $currentQuestion)
+            return "Question not currently available";
+
         $quizz = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true);
 
         if (is_null($quizz["items"][$questionId]))

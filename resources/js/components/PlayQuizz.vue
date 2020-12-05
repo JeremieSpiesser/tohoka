@@ -27,7 +27,7 @@ import Question from "../components/Question.vue";
 
 export default {
         name: "PlayQuizz",
-        props: ['quizzContent', 'quizzBgm', 'quizzCount', 'quizzId', 'idInstance'],
+        props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance'],
         components: {
             Question
         },
@@ -46,7 +46,7 @@ export default {
             }
         },
         mounted() {
-            this.loadQuizz(this.quizzContent, this.quizzCount, this.quizzId, this.idInstance);
+            this.loadQuizz(this.quizzContent, this.quizzCount, this.idInstance);
             this.initBGM(this.quizzBgm);
         },
         methods: {
@@ -55,10 +55,9 @@ export default {
                 this.nbpoints = 0;
                 this.score = 0;
             },
-            loadQuizz(text, count, quizz_Id, idInstance){
+            loadQuizz(text, count, idInstance){
                 this.reset();
                 this.n = count;
-                this.quizz_Id = quizz_Id;
                 this.idInstance = idInstance;
                 this.content = JSON.parse(this.quizzContent);
                 console.log("Corresponding json :" + text);
@@ -86,7 +85,7 @@ export default {
             loadNextQuestion(){
                 if (this.questionId < this.n)
                 {
-                    axios.get('/getquizzquestion/' + this.quizzId + ',' + this.questionId)
+                    axios.get('/getquizzquestion/' + this.idInstance + ',' + this.questionId)
                         .then((response)=>{
                             this.$children[0].loadQuestion(JSON.parse(response.data));
                         })
