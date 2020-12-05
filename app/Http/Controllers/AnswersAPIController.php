@@ -22,17 +22,24 @@ class AnswersAPIController extends Controller
     }
 
     public function registerAnswer(Request $request){
+
+        $instanceId = $request->post('idInstance');
+        $questionId = $request->post('questionId');
+
+        if (!InstanceRepository::canAcceptAnswer($instanceId, $questionId))
+            return "Question not currently available";
+
         $answer = DB::table('answers')
             ->select('answers')
-            ->where('idInstance', $request->post('idInstance'))
+            ->where('idInstance', $instanceId)
             ->where('idPlayer', Auth::id())
             ->first()
             ->answers;
 
         $array = json_decode($answer, true);
-        $array[$request->post('idQuestion')] = json_decode($request->post('answer'), true);
+        $array[$questionId] = json_decode($request->post('answer'), true);
 
         $answer = json_encode($array);
-        AnswerRepository::updateAnswer($request->post('idInstance'), Auth::id(), $answer);
+        AnswerRepository::updateAnswer($instanceId, Auth::id(), $answer);
     }
 }

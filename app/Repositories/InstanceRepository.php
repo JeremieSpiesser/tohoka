@@ -66,4 +66,13 @@ class InstanceRepository
 
         return QuizzRepository::getQuestionDuration(getQuizzId($id), $question);
     }
+
+
+    public static function canAcceptAnswer($instanceId, $questionId){
+        $currentQuestion = InstanceRepository::getCurrentQuestion($instanceId);
+
+        if ($questionId+1 != $currentQuestion)
+            return false;
+        return true;
+    }
 }

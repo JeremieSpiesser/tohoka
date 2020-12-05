@@ -46,10 +46,6 @@ class QuizzsUIController extends Controller
     function getQuizzQuestion($instanceId, $questionId){
 
         $quizzId = InstanceRepository::getQuizzId($instanceId);
-        $currentQuestion = InstanceRepository::getCurrentQuestion($instanceId);
-
-        if ($questionId+1 != $currentQuestion)
-            return "Question not currently available";
 
         $quizz = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true);
 
