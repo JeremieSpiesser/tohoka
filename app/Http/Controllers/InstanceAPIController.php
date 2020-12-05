@@ -58,4 +58,18 @@ class InstanceAPIController extends Controller
     public function joinInstance(){
         return view('joinInstance');
     }
+
+    public function openNextQuestion(Request $req){
+        $id = $req->post('idInstance');
+
+        if (!InstanceRepository::checkInstanceOwner($id, Auth::id()))
+            return "Unauthorized";
+
+        $duration = InstanceRepository::getQuestionDuration($id);
+        InstanceRepository::openNextQuestion($id);
+        sleep($duration);
+        InstanceRepository::blockAnswers($id);
+
+
+    }
 }

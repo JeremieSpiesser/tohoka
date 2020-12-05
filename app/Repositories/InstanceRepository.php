@@ -38,6 +38,13 @@ class InstanceRepository
             ->first()->currentQuestion;
     }
 
+    public static function checkInstanceOwner($idInstance, $idUser){
+        return DB::table('instances')
+            ->select('master')
+            ->where('id', $id)
+            ->first()->master === $idUser;
+    }
+
     public static function blockAnswers($id){
         $question = getCurrentQuestion($id);
 
@@ -52,5 +59,11 @@ class InstanceRepository
         return Instance::where('id', $id)
             ->update(['currentQuestion' => -$question])
             ->count() == 1;
+    }
+
+    public static function getNextQuestionDuration($id){
+        $question = -getCurrentQuestion($id);
+
+        return QuizzRepository::getQuestionDuration(getQuizzId($id), $question);
     }
 }
