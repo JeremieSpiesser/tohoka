@@ -13,6 +13,7 @@
         <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
             <question></question>
             <button type="submit" class="btn btn-primary"> Send</button>
+            <div id="send-feedback">{{ sendFeedback }}</div>
         </form>
 
     </div>
@@ -42,7 +43,8 @@ export default {
                 isAudioPlaying: false,
                 questionId: 0,
                 question: "",
-                content: 0
+                content: 0,
+                sendFeedback: ""
             }
         },
         mounted() {
@@ -99,15 +101,34 @@ export default {
                 formData.append('idInstance', this.idInstance);
                 formData.append('idQuestion', this.questionId-1);
 
+                let that = this;
+
                 const res = /*await*/ axios.post('registerAnswer', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
+                })
+                .then(function (response) {
+                    // Success
+                    this.loadNextQuestion();
+                })
+                .catch(function (error){
+                    if (error.response){
+                        // Out of 2xx
+                        var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
+                        that.sendFeedback = errMessage;
+                        console.log(errMessage);
+                    }
+                    else if (error.request){
+                        // No response
+                        console.log("Error sending the answer");
+                    }
+                    else {
+                        console.log('Unknown error');
+                        // Unknow error
+                    }
                 });
-
-                // TODO : if ok
-                this.loadNextQuestion();
             }
         }
     }

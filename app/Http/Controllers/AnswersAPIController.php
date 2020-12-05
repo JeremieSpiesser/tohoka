@@ -27,7 +27,7 @@ class AnswersAPIController extends Controller
         $questionId = $request->post('questionId');
 
         if (!InstanceRepository::canAcceptAnswer($instanceId, $questionId))
-            return "Question not currently available";
+            return response()->json(['message' => 'You can\'t respond to this question right now!'], 403);
 
         $answer = DB::table('answers')
             ->select('answers')
