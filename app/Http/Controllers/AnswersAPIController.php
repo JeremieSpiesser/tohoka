@@ -26,7 +26,7 @@ class AnswersAPIController extends Controller
         $instanceId = $request->post('idInstance');
         $questionId = $request->post('idQuestion');
 
-        switch(!InstanceRepository::canAcceptAnswer($instanceId, $questionId)){
+        switch(InstanceRepository::canAcceptAnswer($instanceId, $questionId)){
         case -1:
             return response()->json(['message' => "You can't respond to this question right now!"], 403);
             break;

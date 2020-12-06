@@ -65,7 +65,6 @@ class InstanceAPIController extends Controller
         if (!InstanceRepository::checkInstanceOwner($id, Auth::id()))
             return "Unauthorized";
 
-        $duration = InstanceRepository::getNextQuestionDuration($id);
         InstanceRepository::openNextQuestion($id);
     }
 }
