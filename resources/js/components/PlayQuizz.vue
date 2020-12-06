@@ -82,11 +82,29 @@ export default {
         loadNextQuestion(){
             if (this.questionId < this.n)
             {
+                let that = this;
+
                 axios.get('/getquizzquestion/' + this.idInstance + ',' + this.questionId)
                     .then((response)=>{
                         this.$children[0].loadQuestion(JSON.parse(response.data));
+                        this.questionId += 1;
                     })
-                this.questionId += 1;
+                    .catch(function (error){
+                        if (error.response){
+                            // Out of 2xx
+                            var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
+                            that.sendFeedback = errMessage;
+                            console.log(errMessage);
+                        }
+                        else if (error.request){
+                            // No response
+                            console.log("Error loading the question");
+                        }
+                        else {
+                            console.log('Unknown error');
+                            // Unknow error
+                        }
+                    });
             }
         },
 
@@ -106,7 +124,8 @@ export default {
             })
             .then(function (response) {
                 // Success
-                that.loadNextQuestion();
+                //that.loadNextQuestion();
+                that.sendFeedback = "Answer successfully sent";
             })
             .catch(function (error){
                 if (error.response){

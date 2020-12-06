@@ -45,6 +45,9 @@ class QuizzsUIController extends Controller
 
     function getQuizzQuestion($instanceId, $questionId){
 
+        if (!InstanceRepository::canGetQuestion($instanceId, $questionId))
+            return response()->json(['message' => "You can't load this question right now!"], 403);
+
         $quizzId = InstanceRepository::getQuizzId($instanceId);
 
         $quizz = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true);

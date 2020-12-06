@@ -82,12 +82,19 @@ class InstanceRepository
 
     public static function canAcceptAnswer($instanceId, $questionId){
         $req = InstanceRepository::getInstance($instanceId);
+        $diff = Carbon::now()->timestamp - $req->limit;
 
-        if (
-            $questionId == $req->currentQuestion &&
-            Carbon::now()->timestamp < $req->limit
-        )
-            return true;
-        return false;
+        if ($questionId == $req->currentQuestion){
+            if ($diff <= 0)
+                return 0;
+            if ($diff > 0)
+                return 1;
+        }
+
+        return -1;
+    }
+
+    public static function canGetQuestion($instanceId, $questionId){
+        return InstanceRepository::getCurrentQuestion($instanceId) == $questionId;
     }
 }
