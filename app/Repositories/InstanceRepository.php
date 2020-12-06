@@ -9,6 +9,7 @@ use App\Models\Quizz;
 use App\Models\Instance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 /**
  * Class InstanceRepository
@@ -31,6 +32,12 @@ class InstanceRepository
             ->first()->idQuizz;
     }
 
+    public static function getInstance($id){
+        return DB::table('instances')
+            ->where('id', $id)
+            ->first();
+    }
+
     public static function getCurrentQuestion($id){
         return DB::table('instances')
             ->select('currentQuestion')
@@ -45,32 +52,42 @@ class InstanceRepository
             ->first()->master === $idUser;
     }
 
+    /*
     public static function blockAnswers($id){
         $question = InstanceRepository::getCurrentQuestion($id);
 
         return Instance::where('id', $id)
             ->update(['currentQuestion' => -1-$question]) == 1;
     }
+     */
 
     public static function openNextQuestion($id){
         $question = InstanceRepository::getCurrentQuestion($id);
+        $duration = InstanceRepository::getNextQuestionDuration($id);
 
+        // TODO : check that we can't respond to the previous quesiton beforehand
         return Instance::where('id', $id)
-            ->update(['currentQuestion' => -$question]) == 1;
+            ->update([
+                'currentQuestion' => $question + 1,
+                'limit' => Carbon::now()->timestamp + $duration
+            ]) == 1;
     }
 
     public static function getNextQuestionDuration($id){
-        $question = -InstanceRepository::getCurrentQuestion($id);
+        $question = InstanceRepository::getCurrentQuestion($id) + 1;
 
         return QuizzRepository::getQuestionDuration(InstanceRepository::getQuizzId($id), $question);
     }
 
 
     public static function canAcceptAnswer($instanceId, $questionId){
-        $currentQuestion = InstanceRepository::getCurrentQuestion($instanceId);
+        $req = InstanceRepository::getInstance($instanceId);
 
-        if ($questionId+1 != $currentQuestion)
-            return false;
-        return true;
+        if (
+            $questionId == $req->currentQuestion &&
+            Carbon::now()->timestamp < $req->limit
+        )
+            return true;
+        return false;
     }
 }

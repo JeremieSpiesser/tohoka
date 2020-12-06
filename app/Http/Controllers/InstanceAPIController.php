@@ -67,9 +67,5 @@ class InstanceAPIController extends Controller
 
         $duration = InstanceRepository::getNextQuestionDuration($id);
         InstanceRepository::openNextQuestion($id);
-        sleep($duration);
-        InstanceRepository::blockAnswers($id);
-
-
     }
 }
