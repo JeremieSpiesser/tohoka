@@ -15,15 +15,12 @@ class CreateAnswersTable extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->unsignedBigInteger('idInstance');
-            $table->unsignedBigInteger('idPlayer');
+            $table->string('idPlayer');
             $table->json('answers')->default("{}");
 
             $table->foreign('idInstance')
                   ->references('id')
                   ->on('instances');
-            $table->foreign('idPlayer')
-                  ->references('id')
-                  ->on('users');
         });
     }
 
