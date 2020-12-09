@@ -14,7 +14,7 @@ class AnswersAPIController extends Controller
     public function registerToInstance(Request $request){
         DB::table('answers')
             ->updateOrInsert(
-                ['idInstance' => $request->post('idInstance'), 'idPlayer' => Auth::id()],
+                ['idInstance' => $request->post('idInstance'), 'idPlayer' => Session.get('generic_user').id],
                 ['answers' => '{}']
             );
 
@@ -39,7 +39,7 @@ class AnswersAPIController extends Controller
         $answer = DB::table('answers')
             ->select('answers')
             ->where('idInstance', $instanceId)
-            ->where('idPlayer', Auth::id())
+            ->where('idPlayer', Session.get('generic_user').id)
             ->first()
             ->answers;
 
@@ -47,6 +47,6 @@ class AnswersAPIController extends Controller
         $array[$questionId] = json_decode($request->post('answer'), true);
 
         $answer = json_encode($array);
-        AnswerRepository::updateAnswer($instanceId, Auth::id(), $answer);
+        AnswerRepository::updateAnswer($instanceId, Session.get('generic_user').id, $answer);
     }
 }
