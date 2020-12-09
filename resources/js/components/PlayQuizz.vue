@@ -1,21 +1,25 @@
 <template>
-    <div>
-        <h1>{{ content.title }}</h1>
-        <button v-if="quizzBgm" @click="toggleBGM()" type="button">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h1>{{ content.title }}</h1>
+                <button v-if="quizzBgm" @click="toggleBGM()" type="button">
             <span v-if="!isAudioPlaying">
                 Play background audio
             </span>
-            <span v-else>
+                    <span v-else>
                 Pause background audio
             </span>
-        </button>
-        <button @click="loadNextQuestion()" type="button">Load question</button>
-        <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
-            <question></question>
-            <button type="submit" class="btn btn-primary"> Send</button>
-            <div id="send-feedback">{{ sendFeedback }}</div>
-        </form>
-
+                </button>
+                <button @click="loadNextQuestion()" type="button">Load question</button>
+                <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
+                    <question></question>
+                    <button type="submit" class="btn btn-primary"> Send</button>
+                    <div id="send-feedback">{{ sendFeedback }}</div>
+                </form>
+            </div>
+            <users-list :channelSocket="channelSocket" :masterId="masterId"></users-list>
+        </div>
     </div>
 </template>
 
@@ -24,12 +28,14 @@
 //import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
 
 import Question from "../components/Question.vue";
+import UsersList from "./UsersList";
 
 
 export default {
     name: "PlayQuizz",
-    props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance'],
+    props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance', 'masterId'],
     components: {
+        UsersList,
         Question
     },
     data: function(){
@@ -41,15 +47,23 @@ export default {
             score: 0,
             audio: undefined,
             isAudioPlaying: false,
-            questionId: 0,
             question: "",
             content: 0,
-            sendFeedback: ""
+            questionId: -1,
+            sendFeedback: "",
+            channelSocket: 0
         }
+    },
+    beforeMount(){
+        this.channelSocket = window.Echo.join('playquizz.' + this.idInstance);
+
     },
     mounted() {
         this.loadQuizz(this.quizzContent, this.quizzCount, this.idInstance);
         this.initBGM(this.quizzBgm);
+        this.channelSocket.listen('NextQuestion', e => {
+            this.loadNextQuestion(e.idQuestion);
+        });
     },
     methods: {
         reset() {
@@ -79,15 +93,15 @@ export default {
               }
         },
 
-        loadNextQuestion(){
-            if (this.questionId < this.n)
+        loadNextQuestion(quest){
+            if (quest < this.n)
             {
+                this.questionId = quest;
                 let that = this;
 
-                axios.get('/getquizzquestion/' + this.idInstance + ',' + this.questionId)
+                axios.get('/getquizzquestion/' + this.idInstance + ',' + quest)
                     .then((response)=>{
                         this.$children[0].loadQuestion(JSON.parse(response.data));
-                        this.questionId += 1;
                     })
                     .catch(function (error){
                         if (error.response){
@@ -112,7 +126,7 @@ export default {
             const formData = new FormData();
             formData.append('answer', this.$children[0].fillJson());
             formData.append('idInstance', this.idInstance);
-            formData.append('idQuestion', this.questionId-1);
+            formData.append('idQuestion', this.questionId);
 
             let that = this;
 

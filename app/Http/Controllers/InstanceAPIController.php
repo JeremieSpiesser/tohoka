@@ -14,16 +14,10 @@ class InstanceAPIController extends Controller
     public function createInstance(Request $request){
         $instance = new Instance();
 
-        try{
-            QuizzRepository::playQuizz(Auth::id());
-        }
-        catch (Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            echo $e->msg;
-            die();
-        }
+        QuizzRepository::playQuizz(Auth::id());
 
         do{
-            $id = rand(0, 999999);
+            $id = rand(1000, 999999);
         } while (!InstanceRepository::idIsUnused($id));
 
         $instance->master = Auth::id();
@@ -32,7 +26,7 @@ class InstanceAPIController extends Controller
 
         $instance->save();
 
-        return view('manageInstance', ['id' => $id]);
+        return view('manageInstance', ['id' => $id, 'master' => $instance->master]);
     }
 
     public function launchInstance(Request $request){

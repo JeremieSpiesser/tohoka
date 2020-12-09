@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Repositories\InstanceRepository;
 use App\Repositories\AnswerRepository;
-use App\Models\Answers;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\InstanceRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Session;
 
 class AnswersAPIController extends Controller
 {
     public function registerToInstance(Request $request){
+        $idInstance = $request->post('idInstance');
         DB::table('answers')
             ->updateOrInsert(
-                ['idInstance' => $request->post('idInstance'), 'idPlayer' => Session.get('generic_user').id],
+                ['idInstance' => $idInstance, 'idPlayer' => Session::get('generic_user')->{'id'}],
                 ['answers' => '{}']
             );
 
-        return QuizzsUIController::playquizz(InstanceRepository::getQuizzId($request->post('idInstance')), $request->post('idInstance'));
+        $masterId = DB::table('instances')
+            ->select(['master'])
+            ->where('id', $idInstance)
+            ->first()
+            ->master;
+
+        return QuizzsUIController::playquizz(InstanceRepository::getQuizzId($idInstance), $masterId, $idInstance);
     }
 
     public function registerAnswer(Request $request){
@@ -39,7 +45,7 @@ class AnswersAPIController extends Controller
         $answer = DB::table('answers')
             ->select('answers')
             ->where('idInstance', $instanceId)
-            ->where('idPlayer', Session.get('generic_user').id)
+            ->where('idPlayer', Session::get('generic_user')->{'id'})
             ->first()
             ->answers;
 
@@ -47,6 +53,6 @@ class AnswersAPIController extends Controller
         $array[$questionId] = json_decode($request->post('answer'), true);
 
         $answer = json_encode($array);
-        AnswerRepository::updateAnswer($instanceId, Session.get('generic_user').id, $answer);
+        AnswerRepository::updateAnswer($instanceId, Session::get('generic_user')->{'id'}, $answer);
     }
 }

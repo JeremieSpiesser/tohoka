@@ -1,22 +1,38 @@
 <template>
     <div>
-        <h1>{{ idInstance }}</h1>
-        <button @click="openNextQuestion()" type="button">Open the next question</button>
-        <div id="send-feedback">{{ sendFeedback }}</div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <h1>{{ idInstance }}</h1>
+                    <button @click="openNextQuestion()" type="button">Open the next question</button>
+                    <div id="send-feedback">{{ sendFeedback }}</div>
+                </div>
+                <div class="col">
+                    <users-list :channelSocket="channelSocket" :masterId="masterId"></users-list>
+                </div>
+            </div>
+
+        </div>
     </div>
 </template>
 
 <script>
 
+import UsersList from "./UsersList";
 export default {
     name: "ManageInstance",
-    props: ['idInstance'],
+    props: ['idInstance', 'masterId'],
     components: {
+        UsersList
     },
     data: function(){
         return {
-            sendFeedback: ""
+            sendFeedback: "",
+            channelSocket: undefined
         }
+    },
+    beforeMount(){
+        this.channelSocket = window.Echo.join('playquizz.' + this.idInstance);
     },
     mounted() {
     },
@@ -34,8 +50,7 @@ export default {
                 }
             })
             .then(function (response) {
-                // Success
-                this.loadNextQuestion();
+
             })
             .catch(function (error){
                 if (error.response){

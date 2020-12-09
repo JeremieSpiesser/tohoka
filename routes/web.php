@@ -1,7 +1,5 @@
 <?php
 
-use App\Events\PrivateTestEvent;
-use App\Events\TestEvent;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Route;
 use Ramsey\Uuid\Uuid;
@@ -17,12 +15,13 @@ use Ramsey\Uuid\Uuid;
 |
 */
 
+Route::get('/testtest', function (Request $req){
+    broadcast(new \App\Events\UserStateChanged("26199", "1", "Coucou"));
+});
+
 Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz')
     ->middleware('auth')
     ->name('quizz-create');
-
-Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
-    ->name('quizz-play');
 
 Route::get('/getquizzquestion/{quizzId},{questionId}', '\App\Http\Controllers\QuizzsUIController@getQuizzQuestion')
     ->name('get-quizz-question');
@@ -35,12 +34,10 @@ Route::get('/foo', '\App\Http\Controllers\AnswersAPIController@foo')
     ->name('foo');
 
 Route::post('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@registerAnswer')
-    ->middleware('auth')
     ->name('register-answer');
 
 Route::post('/registerToInstance', '\App\Http\Controllers\AnswersAPIController@registerToInstance')
-    ->middleware('auth')
-    ->name('register-to-instance');
+        ->name('register-to-instance');
 
 Route::post('/openNextQuestion', '\App\Http\Controllers\InstanceAPIController@openNextQuestion')
     ->middleware('auth')
@@ -51,7 +48,6 @@ Route::get('/createInstance', '\App\Http\Controllers\InstanceAPIController@creat
     ->name('create-instance');
 
 Route::get('/play', '\App\Http\Controllers\InstanceAPIController@joinInstance')
-    ->middleware('auth')
     ->name('join-instance');
 
 Route::get('/registerInstance', '\App\Http\Controllers\InstancesAPIController@registerInstance')
@@ -99,16 +95,6 @@ Route::post('/broadcasting/auth', function (){
     if (request()->hasSession()) {
         request()->session()->reflash();
     }
-
-    if(!Auth::check()){
-        $user = new GenericUser(['id' => Uuid::uuid4()]);
-
-        request()->setUserResolver(function () use ($user) {
-            return $user;
-        });
-    }
-
-    Session::put('generic_user', request()->user());
 
     return Broadcast::auth(request());
 });

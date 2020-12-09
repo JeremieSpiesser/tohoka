@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Core\App;
+use App\Events\NextQuestion;
 use App\Models\Quizz;
 use App\Models\Instance;
 use Illuminate\Support\Facades\Auth;
@@ -65,12 +66,18 @@ class InstanceRepository
         $question = InstanceRepository::getCurrentQuestion($id);
         $duration = InstanceRepository::getNextQuestionDuration($id);
 
+        $newQuest = $question + 1;
+
         // TODO : check that we can't respond to the previous quesiton beforehand
-        return Instance::where('id', $id)
+         $res = Instance::where('id', $id)
             ->update([
-                'currentQuestion' => $question + 1,
+                'currentQuestion' => $newQuest,
                 'limit' => Carbon::now()->timestamp + $duration
             ]) == 1;
+
+        broadcast(new NextQuestion($id, $newQuest));
+
+        return $res;
     }
 
     public static function getNextQuestionDuration($id){
