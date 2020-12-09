@@ -13,6 +13,10 @@
                         Play this quizz
                     </a>
 
+                    <a class="btn btn-outline-success" href="{{ route('create-instance', ['idQuizz' => $quizz->id]) }}">
+                        Create instance
+                    </a>
+
                     <a class="btn btn-outline-info" href="{{ route('quizz-modify', ['id' => $quizz->id]) }}">
                         Edit this quizz
                     </a>

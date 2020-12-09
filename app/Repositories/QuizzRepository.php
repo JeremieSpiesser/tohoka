@@ -7,6 +7,8 @@ namespace App\Repositories;
 use App\Core\App;
 use App\Models\Quizz;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 /**
  * Class QuizzRepository
@@ -32,5 +34,14 @@ class QuizzRepository
             }
             $query->orWhere('private', '>=', (Auth::check() ? 1 : 2));
         })->firstOrFail();
+    }
+
+    public static function getQuestionDuration($quizzId, $questionId)
+    {
+        $question = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true)['items'][$questionId];
+        $duration = $question['duration'] ?? -1;
+
+        //return $duration >= 1 ? $duration : $GLOBALS['DEFAULT_QUESTION_DURATION'];
+        return $duration >= 1 ? $duration : config('global.DEFAULT_QUESTION_DURATION');
     }
 }

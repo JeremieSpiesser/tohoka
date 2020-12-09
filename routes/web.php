@@ -24,6 +24,40 @@ Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz
 Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
     ->name('quizz-play');
 
+Route::get('/getquizzquestion/{quizzId},{questionId}', '\App\Http\Controllers\QuizzsUIController@getQuizzQuestion')
+    ->name('get-quizz-question');
+
+Route::get('/registerPlayer', '\App\Http\Controllers\AnswersAPIController@registerPlayer')
+    ->middleware('auth')
+    ->name('register-player');
+
+Route::get('/foo', '\App\Http\Controllers\AnswersAPIController@foo')
+    ->name('foo');
+
+Route::post('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@registerAnswer')
+    ->middleware('auth')
+    ->name('register-answer');
+
+Route::post('/registerToInstance', '\App\Http\Controllers\AnswersAPIController@registerToInstance')
+    ->middleware('auth')
+    ->name('register-to-instance');
+
+Route::post('/openNextQuestion', '\App\Http\Controllers\InstanceAPIController@openNextQuestion')
+    ->middleware('auth')
+    ->name('open-next-question');
+
+Route::get('/createInstance', '\App\Http\Controllers\InstanceAPIController@createInstance')
+    ->middleware('auth')
+    ->name('create-instance');
+
+Route::get('/play', '\App\Http\Controllers\InstanceAPIController@joinInstance')
+    ->middleware('auth')
+    ->name('join-instance');
+
+Route::get('/registerInstance', '\App\Http\Controllers\InstancesAPIController@registerInstance')
+    ->middleware('auth')
+    ->name('register-instance');
+
 Route::get('/myquizz', '\App\Http\Controllers\QuizzsUIController@myQuizz')
     ->middleware('auth')
     ->name('user-quizz');
@@ -39,6 +73,9 @@ Route::get('/modifyquizz/{id}', '\App\Http\Controllers\QuizzsUIController@modify
 Route::post('/savequizz','\App\Http\Controllers\QuizzsAPIController@saveQuizz')
     ->middleware('auth')
     ->name('quizz-api-save');
+
+Route::post('/submitAnswer','\App\Http\Controllers\QuizzsAPIController@submitQuestionAnswer')
+    ->name('quizz-submit-question');
 
 Route::post('/modQuizz/{id}','\App\Http\Controllers\QuizzsAPIController@modifyQuizz')
     ->middleware('auth')
