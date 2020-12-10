@@ -69,8 +69,4 @@ class QuizzsUIController extends Controller
 
         return response()->json($question);
     }
-
-    function submitQuestionAnswer(){
-        return 0; // TODO
-    }
 }

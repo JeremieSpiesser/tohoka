@@ -63,13 +63,20 @@ class InstanceRepository
      */
 
     public static function openNextQuestion($id){
-        $question = InstanceRepository::getCurrentQuestion($id);
+        $select = DB::table('instances')
+            ->select('currentQuestion', 'limit')
+            ->where('id', $id)
+            ->first();
+
         $duration = InstanceRepository::getNextQuestionDuration($id);
+        $currentQuestion = $select->currentQuestion;
+        $limit = $select->limit ?? 0;
+        $newQuest = $currentQuestion + 1;
 
-        $newQuest = $question + 1;
+        if ($limit > Carbon::now()->timestamp)
+            return response()->json(['message' => "Wait before the last question is closed"], 403);
 
-        // TODO : check that we can't respond to the previous quesiton beforehand
-         $res = Instance::where('id', $id)
+        $res = Instance::where('id', $id)
             ->update([
                 'currentQuestion' => $newQuest,
                 'limit' => Carbon::now()->timestamp + $duration

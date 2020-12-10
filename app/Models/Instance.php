@@ -13,6 +13,7 @@ class Instance extends Model
         'id',
         'master',
         'idQuizz',
-        'currentQuestion'
+        'currentQuestion',
+        'questionCount'
     ];
 }

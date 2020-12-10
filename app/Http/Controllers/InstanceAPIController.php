@@ -23,6 +23,7 @@ class InstanceAPIController extends Controller
         $instance->master = Auth::id();
         $instance->idQuizz = $request->get('idQuizz');
         $instance->id = $id;
+        $instance->questionCount = QuizzRepository::getQuestionCount($request->get('idQuizz'));
 
         $instance->save();
 
@@ -33,15 +34,15 @@ class InstanceAPIController extends Controller
         $state = InstanceRepository::instanceIsLaunched($request->post('id'));
         switch($state){
         case -1:
-            return "Instance doesn't exist";
+            return response()->json(['message' => "Instance does not exist..."], 403);
             break;
         case true:
-            return "Instance already launched";
+            return response()->json(['message' => "Instance already launched"], 403);
             break;
         case false:
             break;
         default:
-            return "Unknown error";
+            return response()->json(['message' => "Unknown error..."], 403);
         }
 
         return Instance::where('id', $request->post('id'))
@@ -57,8 +58,8 @@ class InstanceAPIController extends Controller
         $id = $req->post('idInstance');
 
         if (!InstanceRepository::checkInstanceOwner($id, Auth::id()))
-            return "Unauthorized";
+            return response()->json(['message' => "Unauthorized"], 403);
 
-        InstanceRepository::openNextQuestion($id);
+        return InstanceRepository::openNextQuestion($id);
     }
 }
