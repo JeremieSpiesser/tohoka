@@ -38,7 +38,7 @@ class AnswersAPIController extends Controller
             return response()->json(['message' => "You can't respond to this question right now!"], 403);
             break;
         case 1:
-            return response()->json(['message' => "It's too late to respond to this question!"], 403);
+            //return response()->json(['message' => "It's too late to respond to this question!"], 403);
             break;
         case 0:
             break;

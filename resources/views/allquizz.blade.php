@@ -12,6 +12,9 @@
                     <a class="btn btn-success" href="{{ route('quizz-play', ['id' => $quizz->id]) }}">
                         Play this quizz
                     </a>
+                    <a class="btn btn-success" href="{{ route('createInstance', ['id' => $quizz->id]) }}">
+                        Create instance
+                    </a>
                 </div>
             </div><br/>
 

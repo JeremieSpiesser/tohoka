@@ -98,7 +98,6 @@ class InstanceRepository
         return QuizzRepository::getQuestionDuration(InstanceRepository::getQuizzId($id), $question);
     }
 
-
     public static function canAcceptAnswer($instanceId, $questionId){
         $req = InstanceRepository::getInstance($instanceId);
         $diff = Carbon::now()->timestamp - $req->limit;
