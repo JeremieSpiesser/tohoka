@@ -19,7 +19,7 @@ class AnswerRepository
         return Answers::select('answers')
             ->where('idInstance', $idInstance)
             ->where('idPlayer', $idPlayer)
-            ->first();
+            ->first()->answers;
     }
 
     public static function updateAnswer($idInstance, $idPlayer, $newAnswer){
