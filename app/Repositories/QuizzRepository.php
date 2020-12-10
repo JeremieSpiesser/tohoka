@@ -36,6 +36,17 @@ class QuizzRepository
         })->firstOrFail();
     }
 
+    public static function getQuestionCount($id){
+        $quizz = Quizz::where('id', $id)->where(function($query) {
+            if(Auth::check()){
+                $query->where('creator', Auth::id());
+            }
+            $query->orWhere('private', '>=', (Auth::check() ? 1 : 2));
+        })->firstOrFail()['content'];
+
+        return count(json_decode($quizz, true)['items']);
+    }
+
     public static function getQuestionDuration($quizzId, $questionId)
     {
         $question = json_decode(QuizzRepository::playQuizz($quizzId)['content'], true)['items'][$questionId];

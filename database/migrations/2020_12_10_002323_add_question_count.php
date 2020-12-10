@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTimestampsToAllowAnswer extends Migration
+class AddQuestionCount extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddTimestampsToAllowAnswer extends Migration
     public function up()
     {
         Schema::table('instances', function (Blueprint $table) {
-            $table->integer('limit')->default(0);
+            $table->integer('questionCount')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddTimestampsToAllowAnswer extends Migration
     public function down()
     {
         Schema::table('instances', function (Blueprint $table) {
-            //
+            $table->dropColumn('questionCount');
         });
     }
 }
