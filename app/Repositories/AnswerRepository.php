@@ -8,6 +8,8 @@ use App\Core\App;
 use App\Models\Answers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserStateChanged;
+use Session;
 
 /**
  * Class AnswerRepository
@@ -35,22 +37,34 @@ class AnswerRepository
             ->select('content')
             ->where('id',InstanceRepository::getQuizzId($idInstance))
             ->first()->content
-            ,true)->items;
+            ,true)['items'];
         
         $points=0;
 
-        for ($i=0 ; i<count($realQuestion);i++){
-            $realAns = realQuestion[i]->answer;
-            $ans = playerAnswer[i];
+        for ($i=0 ; $i<count($realQuestion); $i++){
+            $realAns = $realQuestion[$i]['answers'];
+            $ans = $playerAnswer[$i];
             $r=count(ans);
             $a=count(realAns);
-            for ($j=0; $j<min($r,$a);j++){
-                if (realAns['bool'] && ans['bool']){
+            for ($j=0; $j<min($r,$a); $j++){
+                if ($realAns['bool'] && ans['bool']){
                     $points = $points + 1;
                 }
             }
         }
 
        return $points; 
+    }
+
+    public static function sendAnswers()
+    {
+        $idInstance = Session::get('current_instance');
+        $answers = DB::table('answers')
+            ->where('idInstance', $idInstance)
+            ->get();
+
+        foreach($answers as $answer){
+            broadcast(new UserStateChanged($idInstance, $answer->idPlayer, AnswerRepository::countAnswerPoints($idInstance, $answer->idPlayer)));
+        }
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Instance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Repositories\AnswerRepository;
 
 /**
  * Class InstanceRepository
@@ -72,7 +73,7 @@ class InstanceRepository
         $newQuest = $currentQuestion + 1;
         if ($newQuest >= QuizzRepository::getQuestionCount(InstanceRepository::getQuizzId($id)))
             //return response()->json(['message' => "There is no more questions to open"], 403);
-            AnswersAPIController::sendAnswer();
+            AnswerRepository::sendAnswers();
 
         $duration = InstanceRepository::getNextQuestionDuration($id);
         $limit = $select->limit ?? 0;
