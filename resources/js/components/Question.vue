@@ -2,6 +2,17 @@
     <div>
         <ul>
             <h3>{{ question.question }}</h3>
+            <div v-if='question.imageUrl !== ""'>
+                <img :src="question.imageUrl">
+            </div>
+            <button v-if="this.question.audioUrl !== ''" @click="toggleAudio()" type="button">
+        <span v-if="!isAudioPlaying">
+            Play background audio
+        </span>
+        <span v-else>
+            Pause background audio
+        </span>
+            </button>
             <div v-if='question.type === "qcm" || question.type === "qcma"'>
                 <ul v-for="(possAnswer,index) in question.answers">
                     <li>
@@ -40,7 +51,9 @@ export default {
             return {
                 question: 0,
                 userChoice: [],
-                answer: ""
+                answer: "",
+                audio: undefined,
+                isAudioPlaying: false
             }
         },
         mounted() {
@@ -50,6 +63,21 @@ export default {
             loadQuestion(json){
                 this.userChoice = []
                 this.question = json;
+                if (this.question.audioUrl !== ''){
+                    this.audio = new Audio(this.question.audioUrl);
+                    this.audio.loop = true;
+                    this.audio.volume = 0.25;
+                }
+            },
+
+            toggleAudio(){
+                  if(!this.audio.paused) {
+                      this.isAudioPlaying = false;
+                      this.audio.pause();
+                  }else{
+                      this.isAudioPlaying = true;
+                      this.audio.play();
+                  }
             },
 
             fillJson(){

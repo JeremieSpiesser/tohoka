@@ -13,7 +13,7 @@
             <div class="custom-file">
                 <input type="file" name="bgm" class="custom-file-input" id="inputFileUload"
                 v-on:change="onFileChange">
-                <label class="custom-file-label" for="inputFileUpload">Choose file</label>
+                <label class="custom-file-label" for="inputFileUpload">Choose a background music</label>
             </div>
         </div>
         <br>
@@ -21,6 +21,12 @@
 
         <ul>
             <li id="Questionnaire" v-for="(item,ind) in quizz.items">
+                <h3>{{ item.question }} </h3>
+                <p>Insert a picture if relevant </p>
+                <input type="file" ref="file"><input type="button" value="Upload" @click="uploadFile(ind, 0)">
+                <input type="file" ref="file"><input type="button" value="Upload" @click="uploadFile(ind, 1)">
+                <input type="textbox" v-model="item.question" />
+                <input type="button" value="Delete" 			@click="quizz.removeItemAt(ind)">
 
                 <h3>{{ item.question }} </h3>
                 <form class="form-inline">
@@ -73,14 +79,18 @@
 <script>
 
 import {InputQuizz, InputQuizzItem} from '../classes/inputQuizz';
+import { Axios } from 'axios'
+
 
 export default {
     name: "EditQuizz",
     props: ['quizzContent', 'private'],
     data: function () {
         return {
-            quizz: new InputQuizz("Sample Quiz."),
-            jsonExport: ""
+            quizz: new InputQuizz("Sample quizz"),
+            jsonExport: "",
+            file: '',
+            filename: 'Choose a background music...'
         }
     },
     mounted: function(){
@@ -101,9 +111,53 @@ export default {
         },
         onFileChange(e) {
         //console.log(e.target.files[0]);
-        this.filename = "Selected File: " + e.target.files[0].name;
-        this.file = e.target.files[0];
+            this.filename = "Selected File: " + e.target.files[0].name;
+            this.file = e.target.files[0];
         },
+        uploadFile(id, type){
+            let allofthem = document.querySelectorAll('input[type="file"]');
+            console.log(allofthem);
+            let theone = allofthem[2*id+1+type].files[0];
+            console.log("theone : ");
+            console.log(theone);
+
+            /*let axios = new Axios();*/
+            /*axios.post('/upload', post)*/
+                    /*.then(res => {*/
+                        /*commit('image', file.files[0])*/
+                    /*}).catch(err => {*/
+                        /*console.log(err)*/
+            /*})*/
+            let formData = new FormData();
+            let that = this;
+            if (type === 0){
+                formData.append("image",theone);
+                formData.append("typeUpload", 0);
+            }
+            else{
+                formData.append("audio",theone);
+                formData.append("typeUpload", 1);
+            }
+            axios.post('../upload',formData,{
+                                headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }}).then(function(e){
+                        console.log("success apparently");
+                        console.log(e);
+                        let res = e.data; 
+                        let s = "/storage/" + String(res.id) + "/" + String(res.filename);
+                        console.log("voici la s");
+                        console.log(s);
+                        if (type === 0)
+                            that.quizz.items[id].setImage(s);
+                        else
+                            that.quizz.items[id].setSound(s);
+                    }).catch(function(err){
+                        console.log("error");
+                        console.log(err)
+                        });
+
+        }
     }
 }
 
