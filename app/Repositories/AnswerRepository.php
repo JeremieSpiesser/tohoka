@@ -25,10 +25,9 @@ class AnswerRepository
     }
 
     public static function updateAnswer($idInstance, $idPlayer, $newAnswer){
-        return DB::table('answers')
-            ->where('idInstance', $idInstance)
-            ->where('idPlayer', $idPlayer)
-            ->update(['answers' => $newAnswer]);
+        $ans = Answers::where('idInstance', $idInstance)->where('idPlayer', $idPlayer)->findOrFail();
+        $ans->answers = $newAnswer;
+        return $ans->save();
     }
 
     public static function countAnswerPoints($idInstance, $idPlayer){
