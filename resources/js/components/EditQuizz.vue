@@ -23,7 +23,8 @@
             <li id="Questionnaire" v-for="(item,ind) in quizz.items">
                 <h3>{{ item.question }} </h3>
                 <p>Insert a picture if relevant </p>
-                <input type="file" on:change="handleFileUpload()" ref="file"><input type="button" value="Upload" @click="uploadImage(ind)">
+                <input type="file" ref="file"><input type="button" value="Upload" @click="uploadFile(ind, 0)">
+                <input type="file" ref="file"><input type="button" value="Upload" @click="uploadFile(ind, 1)">
                 <input type="textbox" v-model="item.question" />
                 <input type="button" value="Delete" 			@click="quizz.removeItemAt(ind)">
 
@@ -88,7 +89,8 @@ export default {
         return {
             quizz: new InputQuizz("Sample quizz"),
             jsonExport: "",
-            file: ''
+            file: '',
+            filename: 'Choose a background music...'
         }
     },
     mounted: function(){
@@ -112,10 +114,10 @@ export default {
             this.filename = "Selected File: " + e.target.files[0].name;
             this.file = e.target.files[0];
         },
-        uploadImage(id){
+        uploadFile(id, type){
             let allofthem = document.querySelectorAll('input[type="file"]');
             console.log(allofthem);
-            let theone = allofthem[id+1].files[0];
+            let theone = allofthem[2*id+1+type].files[0];
             console.log("theone : ");
             console.log(theone);
 
@@ -128,7 +130,14 @@ export default {
             /*})*/
             let formData = new FormData();
             let that = this;
-            formData.append("image",theone);
+            if (type === 0){
+                formData.append("image",theone);
+                formData.append("typeUpload", 0);
+            }
+            else{
+                formData.append("audio",theone);
+                formData.append("typeUpload", 1);
+            }
             axios.post('../upload',formData,{
                                 headers: {
                       'Content-Type': 'multipart/form-data'
@@ -139,7 +148,10 @@ export default {
                         let s = "/storage/" + String(res.id) + "/" + String(res.filename);
                         console.log("voici la s");
                         console.log(s);
-                        that.quizz.items[id].setImage(s);
+                        if (type === 0)
+                            that.quizz.items[id].setImage(s);
+                        else
+                            that.quizz.items[id].setSound(s);
                     }).catch(function(err){
                         console.log("error");
                         console.log(err)
