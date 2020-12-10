@@ -1,9 +1,7 @@
 <?php
 
 use App\Events\UserStateChanged;
-use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Route;
-use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,8 +56,11 @@ Route::get('/foo', '\App\Http\Controllers\AnswersAPIController@foo')
 Route::post('/registerAnswer', '\App\Http\Controllers\AnswersAPIController@registerAnswer')
     ->name('register-answer');
 
-Route::post('/registerToInstance', '\App\Http\Controllers\AnswersAPIController@registerToInstance')
+Route::get('/play/{idInstance}', '\App\Http\Controllers\AnswersAPIController@registerToInstance')
         ->name('register-to-instance');
+
+Route::get('/play', '\App\Http\Controllers\InstanceAPIController@joinInstance')
+    ->name('join-instance');
 
 Route::post('/openNextQuestion', '\App\Http\Controllers\InstanceAPIController@openNextQuestion')
     ->middleware('auth')
@@ -68,9 +69,6 @@ Route::post('/openNextQuestion', '\App\Http\Controllers\InstanceAPIController@op
 Route::get('/createInstance', '\App\Http\Controllers\InstanceAPIController@createInstance')
     ->middleware('auth')
     ->name('create-instance');
-
-Route::get('/play', '\App\Http\Controllers\InstanceAPIController@joinInstance')
-    ->name('join-instance');
 
 Route::get('/registerInstance', '\App\Http\Controllers\InstancesAPIController@registerInstance')
     ->middleware('auth')
@@ -107,7 +105,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Auth::routes();
 
-Route::get('/play/{id}', function ($id){
+Route::get('/chat/{id}', function ($id){
     return view('testchat', ['id' => $id]);
 });
 

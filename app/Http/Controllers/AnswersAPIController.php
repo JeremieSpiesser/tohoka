@@ -10,8 +10,7 @@ use Session;
 
 class AnswersAPIController extends Controller
 {
-    public function registerToInstance(Request $request){
-        $idInstance = $request->post('idInstance');
+    public function registerToInstance(Request $request, $idInstance){
         DB::table('answers')
             ->updateOrInsert(
                 ['idInstance' => $idInstance, 'idPlayer' => Session::get('generic_user')->{'id'}],

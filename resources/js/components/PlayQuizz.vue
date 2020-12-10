@@ -94,14 +94,11 @@ export default {
             if (quest < this.quizzCount)
             {
                 this.questionId = quest;
+                this.timeout = false;
                 let that = this;
 
                 axios.get('/getquizzquestion/' + this.idInstance + ',' + quest)
                     .then((response)=>{
-
-                        this.timeout = false;
-
-                        console.log(this.$children)
 
                         this.$refs.questRef.loadQuestion(JSON.parse(response.data));
 
@@ -140,7 +137,7 @@ export default {
 
             let that = this;
 
-            const res = /*await*/ axios.post('registerAnswer', formData, {
+            const res = /*await*/ axios.post('/registerAnswer', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

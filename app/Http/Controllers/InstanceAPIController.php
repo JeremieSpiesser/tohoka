@@ -27,7 +27,7 @@ class InstanceAPIController extends Controller
 
         $instance->save();
 
-        return view('manageInstance', ['id' => $id, 'master' => $instance->master]);
+        return view('manageInstance', ['id' => $id, 'master' => $instance->master, 'num' => $instance->questionCount]);
     }
 
     public function launchInstance(Request $request){

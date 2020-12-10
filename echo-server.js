@@ -14,7 +14,7 @@ echo.run({
     },
     "devMode": true,
     "host": null,
-    "port": "6001",
+    "port": process.env.MIX_SOCKET_PORT,
     "protocol": "http",
     "socketio": {},
     "secureOptions": 67108864,
