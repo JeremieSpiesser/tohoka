@@ -26,6 +26,14 @@ Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz
 Route::get('/getquizzquestion/{quizzId},{questionId}', '\App\Http\Controllers\QuizzsUIController@getQuizzQuestion')
     ->name('get-quizz-question');
 
+Route::get('/playquizz/{id}', '\App\Http\Controllers\QuizzsUIController@playQuizz')
+    ->name('quizz-play');
+
+
+Route::get('/registerPlayer', '\App\Http\Controllers\AnswersAPIController@registerPlayer')
+    ->middleware('auth')
+    ->name('register-player');
+
 Route::get('/registerPlayer', '\App\Http\Controllers\AnswersAPIController@registerPlayer')
     ->middleware('auth')
     ->name('register-player');
