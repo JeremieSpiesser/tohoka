@@ -1,5 +1,8 @@
 <template>
     <div class="container-fluid">
+        <div v-if="gameStarted" class="row pt-3 pb-4">
+            <timer :on-complete="hideQuestion" :timeout="timeout"></timer>
+        </div>
         <div class="row">
             <div class="col">
                 <h1>{{ content.title }}</h1>
@@ -7,18 +10,22 @@
             <span v-if="!isAudioPlaying">
                 Play background audio
             </span>
-                    <span v-else>
+            <span v-else>
                 Pause background audio
             </span>
                 </button>
-                <button @click="loadNextQuestion()" type="button">Load question</button>
-                <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
-                    <question></question>
+
+                <form v-bind:class="{'d-none' : timeout || !gameStarted}" v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
+                    <question ref="questRef"></question>
                     <button type="submit" class="btn btn-primary"> Send</button>
                     <div id="send-feedback">{{ sendFeedback }}</div>
                 </form>
+                <span v-if="timeout && gameStarted">Temps écoulé !</span>
+                <span v-if="!gameStarted">Attendez que l'animateur démarre la partie</span>
             </div>
-            <users-list :channelSocket="channelSocket" :masterId="masterId"></users-list>
+            <div class="col">
+                <users-list :channelSocket="channelSocket" :masterId="masterId"></users-list>
+            </div>
         </div>
     </div>
 </template>
@@ -29,29 +36,28 @@
 
 import Question from "../components/Question.vue";
 import UsersList from "./UsersList";
+import Timer from "./Timer";
 
 
 export default {
     name: "PlayQuizz",
     props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance', 'masterId'],
     components: {
-        UsersList,
-        Question
+        Question,
+        Timer,
+        UsersList
     },
     data: function(){
         return {
-            //quizz: new OutputQuizz(),
-            gameFinished: false,
-            nbgoodanswers: 0,
-            nbpoints: 0,
-            score: 0,
             audio: undefined,
             isAudioPlaying: false,
-            question: "",
             content: 0,
             questionId: -1,
             sendFeedback: "",
-            channelSocket: 0
+            channelSocket: 0,
+            timeout: false,
+
+            gameStarted: false
         }
     },
     beforeMount(){
@@ -59,24 +65,15 @@ export default {
 
     },
     mounted() {
-        this.loadQuizz(this.quizzContent, this.quizzCount, this.idInstance);
         this.initBGM(this.quizzBgm);
         this.channelSocket.listen('NextQuestion', e => {
+            this.gameStarted = true;
             this.loadNextQuestion(e.idQuestion);
         });
     },
     methods: {
-        reset() {
-            this.nbgoodanswers = 0;
-            this.nbpoints = 0;
-            this.score = 0;
-        },
-        loadQuizz(text, count, idInstance){
-            this.reset();
-            this.n = count;
-            this.idInstance = idInstance;
-            this.content = JSON.parse(this.quizzContent);
-            console.log("Corresponding json :" + text);
+        hideQuestion(){
+            this.timeout = true;
         },
         initBGM(path){
             this.audio = new Audio(path);
@@ -94,16 +91,29 @@ export default {
         },
 
         loadNextQuestion(quest){
-            if (quest < this.n)
+            if (quest < this.quizzCount)
             {
                 this.questionId = quest;
                 let that = this;
 
                 axios.get('/getquizzquestion/' + this.idInstance + ',' + quest)
                     .then((response)=>{
-                        this.$children[0].loadQuestion(JSON.parse(response.data));
+
+                        this.timeout = false;
+
+                        console.log(this.$children)
+
+                        this.$refs.questRef.loadQuestion(JSON.parse(response.data));
+
+                        axios.get('/state/load/' + this.questionId)
+                            .then(resp => {
+
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
                     })
-                    .catch(function (error){
+                    /*.catch(function (error){
                         if (error.response){
                             // Out of 2xx
                             var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
@@ -118,13 +128,13 @@ export default {
                             console.log('Unknown error');
                             // Unknow error
                         }
-                    });
+                    })*/;
             }
         },
 
         sendAnswer(){
             const formData = new FormData();
-            formData.append('answer', this.$children[0].fillJson());
+            formData.append('answer', this.$refs.questRef.fillJson());
             formData.append('idInstance', this.idInstance);
             formData.append('idQuestion', this.questionId);
 
@@ -136,10 +146,17 @@ export default {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             })
-            .then(function (response) {
+            .then((response) => {
                 // Success
                 //that.loadNextQuestion();
                 that.sendFeedback = "Answer successfully sent";
+                axios.get('/state/finish/' + this.questionId)
+                    .then(resp => {
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             })
             .catch(function (error){
                 if (error.response){

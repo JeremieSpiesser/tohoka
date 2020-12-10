@@ -24,6 +24,8 @@ class AnswersAPIController extends Controller
             ->first()
             ->master;
 
+        Session::put('current_instance', $idInstance);
+
         return QuizzsUIController::playquizz(InstanceRepository::getQuizzId($idInstance), $masterId, $idInstance);
     }
 

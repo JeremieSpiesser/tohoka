@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="col" v-for="(user, index) in connectedUsers">
-            <p>{{ user.name }} --> {{ user.state }}</p>
+            <p><b>{{ user.name }}</b><br>  --> {{ user.state }}</p>
         </div>
     </div>
 </template>
@@ -13,7 +13,7 @@ export default {
     data: function(){
         return {
             connectedUsers: {},
-            myUserId: ''
+            myUserId: undefined
         }
     },
     mounted() {
@@ -24,6 +24,7 @@ export default {
                 users.forEach(user => {
                     if(this.myUserId === undefined){
                         this.myUserId = user.id;
+                        user.name = user.name + " (Vous)";
                     }
 
                     if(user.id == this.masterId){

@@ -72,7 +72,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Play other user's quizzs</h5>
-                            <a href="#" class="btn btn-warning">Coming soon ...</a>
+                            <a href="{{ route('all-quizz') }}" class="btn btn-primary">Go !</a>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Access a specific user's room</h5>
-                            <a href="#" class="btn btn-warning">Coming soon ...</a>
+                            <a href="{{ route('join-instance') }}" class="btn btn-primary">Let's play together !</a>
                         </div>
                     </div>
                 </div>
