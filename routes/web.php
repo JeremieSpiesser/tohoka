@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\UserStateChanged;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Route;
 use Ramsey\Uuid\Uuid;
@@ -15,8 +16,21 @@ use Ramsey\Uuid\Uuid;
 |
 */
 
-Route::get('/testtest', function (Request $req){
-    broadcast(new \App\Events\UserStateChanged("26199", "1", "Coucou"));
+Route::get('/state/{a}/{q}', function (Request $req, $a, $q){
+    if(!Session::has('current_instance') || !Session::has('generic_user')){
+        abort(404);
+    }
+    $msg = "";
+    switch($a){
+        case "load":
+            $msg = "Question " . $q . " : En train de répondre ...";
+            break;
+        case "finish":
+            $msg = "Question " . $q . " : A répondu ...";
+            break;
+    }
+
+    broadcast(new UserStateChanged(Session::get('current_instance'), Session::get('generic_user')->id, $msg));
 });
 
 Route::get('/createquizz', '\App\Http\Controllers\QuizzsUIController@createQuizz')
