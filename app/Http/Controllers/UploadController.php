@@ -24,6 +24,7 @@ class UploadController extends Controller
         $image = $request->file('image');
         $image_uploaded_path = $image->store($uploadFolder, 'public');
         return response()->json([
+            'id' => $uploadFolder,
             'filename' => basename($image_uploaded_path),
             'status' => 200,
         ], 200);
