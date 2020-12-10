@@ -40,6 +40,7 @@ module.exports.InputQuizzItem = function(question, answers, type="qcm"){
         type: type,
         //variable used only if the item gets transformed to a true/false question
         isTrue: true,
+        imageUrl: undefined,
         getAnswersTitles: function(){
             return this.answers.map((answer) => answer.question)
         },
@@ -48,6 +49,9 @@ module.exports.InputQuizzItem = function(question, answers, type="qcm"){
                 answer: answer,
                 bool : false
             });
+        },
+        setImage: function(url){
+            this.imageUrl = url;
         },
         switchToTf: function(){
             if (this.type !== "tf"){

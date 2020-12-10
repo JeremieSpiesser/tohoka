@@ -17,6 +17,7 @@ module.exports.OutputQuizzItem = function(question, answers, type="qcm") {
         isTrue: true,
         userUniqueChoice: undefined,
         userTfChoice: true,
+        imageUrl: undefined,
         getAnswersTitles: function(){
             return this.answers.map((answer) => answer.question);
         },

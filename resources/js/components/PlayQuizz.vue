@@ -4,6 +4,8 @@
         <button @click="toggleBGM()" type="button">Play background audio</button>
         <ul>
             <li v-for="item in quizz.items">
+                <img :src="item.imageUrl">
+                <p>{{item.imageUrl}}</p>
                 <h3  v-if="gameFinished" class="alert alert-primary" role="alert">
                     {{ item.question }}<div style="text-align:right;font-style: italic;">Score : {{ item.score }}/{{ item.getNbGoodAnswers() }}</div></h3>
                 <h3  v-else>{{ item.question }} </h3>

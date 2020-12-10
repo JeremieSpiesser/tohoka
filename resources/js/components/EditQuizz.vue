@@ -7,7 +7,7 @@
             <div class="custom-file">
                 <input type="file" name="bgm" class="custom-file-input" id="inputFileUload"
                 v-on:change="onFileChange">
-                <label class="custom-file-label" for="inputFileUpload">Choose file</label>
+                <label class="custom-file-label" for="inputFileUpload">Choose a background music</label>
             </div>
         </div>
         <br>
@@ -97,12 +97,16 @@ export default {
         },
         onFileChange(e) {
         //console.log(e.target.files[0]);
-        this.filename = "Selected File: " + e.target.files[0].name;
-        this.file = e.target.files[0];
+            this.filename = "Selected File: " + e.target.files[0].name;
+            this.file = e.target.files[0];
         },
         uploadImage(id){
             let allofthem = document.querySelectorAll('input[type="file"]');
-            let theone = allofthem[id].files[0];
+            console.log(allofthem);
+            let theone = allofthem[id+1].files[0];
+            console.log("theone : ");
+            console.log(theone);
+
             /*let axios = new Axios();*/
             /*axios.post('/upload', post)*/
                     /*.then(res => {*/
@@ -111,15 +115,19 @@ export default {
                         /*console.log(err)*/
             /*})*/
             let formData = new FormData();
+            let that = this;
             formData.append("image",theone);
-            axios.post('upload',formData,{
+            axios.post('../upload',formData,{
                                 headers: {
                       'Content-Type': 'multipart/form-data'
                     }}).then(function(e){
                         console.log("success apparently");
-                        let res = JSON.parse(e);
-                        this.quizz.items[id] = res["filename"];
-                        console.log(e)
+                        console.log(e);
+                        let res = e.data; 
+                        let s = "/storage/" + String(res.id) + "/" + String(res.filename);
+                        console.log("voici la s");
+                        console.log(s);
+                        that.quizz.items[id].setImage(s);
                     }).catch(function(err){
                         console.log("error");
                         console.log(err)
