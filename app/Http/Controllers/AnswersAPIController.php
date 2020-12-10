@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answers;
 use App\Repositories\AnswerRepository;
 use App\Repositories\InstanceRepository;
 use Illuminate\Http\Request;
@@ -11,11 +12,12 @@ use Session;
 class AnswersAPIController extends Controller
 {
     public function registerToInstance(Request $request, $idInstance){
-        DB::table('answers')
-            ->updateOrInsert(
-                ['idInstance' => $idInstance, 'idPlayer' => Session::get('generic_user')->{'id'}],
-                ['answers' => '{}']
-            );
+        $ans = new Answers();
+        $ans->idInstance = $idInstance;
+        $ans->idPlayer = Session::get('generic_user')->{'id'};
+        $ans->answers = '[]';
+
+        $ans->save();
 
         $masterId = DB::table('instances')
             ->select(['master'])
