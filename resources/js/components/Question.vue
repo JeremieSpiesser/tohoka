@@ -2,6 +2,7 @@
     <div>
         <ul>
             <h3>{{ question.question }}</h3>
+            <img :src="question.imageUrl">
             <div v-if='question.type === "qcm" || question.type === "qcma"'>
                 <ul v-for="(possAnswer,index) in question.answers">
                     <li>
