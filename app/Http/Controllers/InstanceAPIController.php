@@ -8,6 +8,7 @@ use App\Repositories\InstanceRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Instance;
 use Illuminate\Http\Request;
+use Session;
 
 class InstanceAPIController extends Controller
 {
@@ -26,6 +27,8 @@ class InstanceAPIController extends Controller
         $instance->questionCount = QuizzRepository::getQuestionCount($request->get('idQuizz'));
 
         $instance->save();
+
+        Session::put('current_instance', $id);
 
         return view('manageInstance', ['id' => $id, 'master' => $instance->master, 'num' => $instance->questionCount]);
     }

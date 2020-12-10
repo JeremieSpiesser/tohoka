@@ -8,7 +8,7 @@
                 <div class="col">
                     <h1 v-if="currentQuestion >= 0">Question : {{currentQuestion }}</h1>
                     <h2>Code : {{ idInstance }}</h2>
-                    <button @click="openNextQuestion()" :disabled="btnDisableFlag" type="button">{{ String(currentQuestion + 1) === quizzNum ? 'Voir les résultats' : gameStarted ? 'Question suivante' : 'Démarrer le jeu' }}</button>
+                    <button @click="openNextQuestion()" :disabled="btnDisableFlag" type="button">{{ parseInt(currentQuestion) + 1 === parseInt(quizzNum) ? 'Voir les résultats' : gameStarted ? 'Question suivante' : 'Démarrer le jeu' }}</button>
                     <div id="send-feedback">{{ sendFeedback }}</div>
                 </div>
                 <div class="col">

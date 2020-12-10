@@ -32,28 +32,51 @@ class AnswerRepository
     }
 
     public static function countAnswerPoints($idInstance, $idPlayer){
-        $playerAnswer= json_decode(AnswerRepository::getPlayerAnswer($idInstance,$idPlayer),true);
-        $realQuestion = json_decode(DB::table('quizzs')
+        $playerAnswers= json_decode(AnswerRepository::getPlayerAnswer($idInstance,$idPlayer),true);
+        $realQuestions = json_decode(DB::table('quizzs')
             ->select('content')
             ->where('id',InstanceRepository::getQuizzId($idInstance))
             ->first()->content
             ,true)['items'];
-        
-        $points=0;
 
-        for ($i=0 ; $i<count($realQuestion); $i++){
-            $realAns = $realQuestion[$i]['answers'];
-            $ans = $playerAnswer[$i];
-            $r=count(ans);
-            $a=count(realAns);
-            for ($j=0; $j<min($r,$a); $j++){
-                if ($realAns['bool'] && ans['bool']){
-                    $points = $points + 1;
-                }
+        var_dump($playerAnswers);
+        var_dump($realQuestions);
+
+        $points = 0;
+        $total = 0;
+
+        for($quest = 0; $quest < count($realQuestions); $quest++){
+            $partialPoint = 0;
+            $realQuest = $realQuestions[$quest];
+            $playerQuest = $playerAnswers[$quest];
+
+            switch ($realQuest['type']){
+                case 'classic':
+                    $partialPoint += $realQuest['answers'][$playerQuest[0]]['bool'] ? 1 : 0;
+                    $total++;
+                    break;
+                case 'qcma':
+                case 'qcm':
+                    for($qcm = 0; $qcm < count($realQuest['answers']); $qcm++){
+                        if(!in_array($qcm, $playerQuest, true) || $playerQuest[$qcm] === null){
+                            $playerQuest[$qcm] = false;
+                        }
+                        $partialPoint += $playerQuest[$qcm] == $realQuest['answers'][$qcm]['bool'] ? 1 : -1;
+                        $total++;
+                    }
+                    break;
+                case 'tf':
+                    $partialPoint += $playerQuest[0] == $realQuest['isTrue'] ? 1 : -1;
+                    $total++;
+                    break;
             }
+            if($partialPoint < 0){
+                $partialPoint = 0;
+            }
+            $points += $partialPoint;
         }
 
-       return $points; 
+       return [$points, $total];
     }
 
     public static function sendAnswers()
@@ -64,7 +87,10 @@ class AnswerRepository
             ->get();
 
         foreach($answers as $answer){
-            broadcast(new UserStateChanged($idInstance, $answer->idPlayer, AnswerRepository::countAnswerPoints($idInstance, $answer->idPlayer)));
+            [$points, $max] = AnswerRepository::countAnswerPoints($idInstance, $answer->idPlayer);
+            broadcast(new UserStateChanged($idInstance, $answer->idPlayer, "Score : $points/$max"));
         }
+
+        return \Response::json(['status' => 'ok']);
     }
 }

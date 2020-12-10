@@ -28,8 +28,6 @@ Broadcast::channel('playquizz.{id}', function ($user, $id) {
         $user->name = Session::get('play_name');
     }
 
-    Session::put('current_playroom', $id);
-
     return ['id' => $user->id, 'name' => $user->name, 'state' => 'En attente ...'];
 });
 

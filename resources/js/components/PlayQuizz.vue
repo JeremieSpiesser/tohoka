@@ -95,6 +95,7 @@ export default {
             {
                 this.questionId = quest;
                 this.timeout = false;
+                this.$refs.questRef.loadQuestion({});
                 let that = this;
 
                 axios.get('/getquizzquestion/' + this.idInstance + ',' + quest)

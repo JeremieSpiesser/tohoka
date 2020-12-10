@@ -72,8 +72,7 @@ class InstanceRepository
         $currentQuestion = $select->currentQuestion;
         $newQuest = $currentQuestion + 1;
         if ($newQuest >= QuizzRepository::getQuestionCount(InstanceRepository::getQuizzId($id)))
-            //return response()->json(['message' => "There is no more questions to open"], 403);
-            AnswerRepository::sendAnswers();
+            return AnswerRepository::sendAnswers();
 
         $duration = InstanceRepository::getNextQuestionDuration($id);
         $limit = $select->limit ?? 0;
