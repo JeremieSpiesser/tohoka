@@ -14,6 +14,7 @@ class CreateAnswersTable extends Migration
     public function up()
     {
         Schema::create('answers', function (Blueprint $table) {
+            $table->integer('id', true)->primary();
             $table->unsignedBigInteger('idInstance');
             $table->string('idPlayer');
             $table->json('answers')->default("{}");
