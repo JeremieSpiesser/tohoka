@@ -68,13 +68,17 @@ class InstanceRepository
             ->where('id', $id)
             ->first();
 
-        $duration = InstanceRepository::getNextQuestionDuration($id);
         $currentQuestion = $select->currentQuestion;
-        $limit = $select->limit ?? 0;
         $newQuest = $currentQuestion + 1;
+        if ($newQuest >= QuizzRepository::getQuestionCount(InstanceRepository::getQuizzId($id)))
+            return response()->json(['message' => "There is no more questions to open"], 403);
+
+        $duration = InstanceRepository::getNextQuestionDuration($id);
+        $limit = $select->limit ?? 0;
 
         if ($limit > Carbon::now()->timestamp)
             return response()->json(['message' => "Wait before the last question is closed"], 403);
+
 
         $res = Instance::where('id', $id)
             ->update([
