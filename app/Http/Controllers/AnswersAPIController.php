@@ -57,29 +57,16 @@ class AnswersAPIController extends Controller
         $answer = json_encode($array);
         AnswerRepository::updateAnswer($instanceId, Session::get('generic_user')->{'id'}, $answer);
     }
-    
-    public function countAnswerPoints($idInstance, $idPlayer){
-        $playerAnswer= json_decode(AnswerRepository::getPlayerAnswer($idInstance,$idPlayer),true);
-        $realQuestion = json_decode(DB::table('quizzs')
-            ->select('content')
-            ->where('id',InstanceRepository::getQuizzId($idInstance))
-            ->first()->content
-            ,true)->items;
-        
-        $points=0;
 
-        for ($i=0 ; i<count($realQuestion);i++){
-            $realAns = realQuestion[i]->answer;
-            $ans = playerAnswer[i];
-            $r=count(ans);
-            $a=count(realAns);
-            for ($j=0; $j<min($r,$a);j++){
-                if (realAns['bool'] && ans['bool']){
-                    $points = $points + 1;
-                }
-            }
+    public static function sendAnswers()
+    {
+        $idInstance = Session::get('current_instance');
+        $answers = DB::table('answers')
+            ->where('idInstance', $idInstance)
+            ->get();
+
+        foreach($answers as $answer){
+            broadcast(new UserStateChanged($idInstance, $answer->idPlayer, AnswerRepository::countAnswerPoints($idInstance, $answer->idPlayer));
         }
-
-       return $points; 
     }
 }
