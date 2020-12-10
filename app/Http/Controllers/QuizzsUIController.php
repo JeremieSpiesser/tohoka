@@ -64,7 +64,8 @@ class QuizzsUIController extends Controller
         $question = json_encode([
             "question" => $quizz["items"][$questionId]["question"],
             "answers" => $answers,
-            "type" => $quizz["items"][$questionId]["type"]
+            "type" => $quizz["items"][$questionId]["type"],
+            "imageUrl" => $quizz["items"][$questionId]["imageUrl"]
         ]);
 
         return response()->json($question);
