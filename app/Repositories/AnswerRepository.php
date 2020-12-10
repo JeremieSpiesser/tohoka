@@ -25,7 +25,7 @@ class AnswerRepository
     }
 
     public static function updateAnswer($idInstance, $idPlayer, $newAnswer){
-        $ans = Answers::where('idInstance', $idInstance)->where('idPlayer', $idPlayer)->findOrFail();
+        $ans = Answers::where('idInstance', $idInstance)->where('idPlayer', $idPlayer)->firstOrFail();
         $ans->answers = $newAnswer;
         return $ans->save();
     }
