@@ -1,7 +1,13 @@
 <template>
     <div>
-        <h1>Quizz : {{ quizz.title }}</h1>
-        <input type="textbox" name="name" v-model="quizz.title" />
+        <h1 class="display-2" id = "Head">Quizz: {{ quizz.title }}</h1>
+        <input type="textbox" name="name" id ="QuizTitle" placeholder="Nom du Quizz" v-model="quizz.title" />
+
+        <select v-model="private" name="private">
+            <option value="0">Privé</option>
+            <option value="1">Connecté</option>
+            <option value="2">Public</option>
+        </select>
 
         <div class="input-group">
             <div class="custom-file">
@@ -14,30 +20,37 @@
         <p class="text-danger font-weight-bold">{{filename}}</p>
 
         <ul>
-            <li v-for="(item,ind) in quizz.items">
+            <li id="Questionnaire" v-for="(item,ind) in quizz.items">
                 <h3>{{ item.question }} </h3>
                 <p>Insert a picture if relevant </p>
                 <input type="file" on:change="handleFileUpload()" ref="file"><input type="button" value="Upload" @click="uploadImage(ind)">
                 <input type="textbox" v-model="item.question" />
                 <input type="button" value="Delete" 			@click="quizz.removeItemAt(ind)">
 
+                <h3>{{ item.question }} </h3>
+                <form class="form-inline">
+                <div class="form-row align-items-center">
+                    <input type="textbox" v-model="item.question" />
+                    <input type="button"  class="btn btn-outline-danger" value="Delete." 	@click="quizz.removeItemAt(ind)">
+                    <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
 
-                <select v-model="item.type">
-                    <option value="qcm">QCM sans avertissement</option>
-                    <option value="classic">Question à réponse unique</option>
-                    <option value="qcma">QCM avec avertissement</option>
-                    <option value="tf">Vrai/Faux</option>
-                </select>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="item.type">
+                        <option value="qcm">QCM sans avertissement</option>
+                        <option value="classic">Question à réponse unique</option>
+                        <option value="qcma">QCM avec avertissement</option>
+                        <option value="tf">Vrai/Faux</option>
+                    </select>
+                </div>
+                </form>
 
                 <div v-if="item.type === 'classic'">
                     <ul v-for="(possAnswer,index) in item.answers">
 
                         <li>  {{ index }} : {{ possAnswer.answer }} </li>  <input type="textbox" v-model="possAnswer.answer" />
-                        <input type="button" value="Delete" @click="item.removeItemAt(index)"/>
+                        <input type="button" class="btn btn-outline-danger btn-sm" value="Delete" @click="item.removeItemAt(index)"/>
                         Vrai ? <input type="checkbox" v-model="possAnswer.bool" @click="item.disableOthers(possAnswer)" placeholder="Correct answer ?" />
-		</ul>
-                    <button type="button" @click="item.addPossibleAnswer()"> Add an answer </button>
-
+		            </ul>
+                    <button type="button"  class="btn btn-outline-success btn-sm" @click="item.addPossibleAnswer()" > Add an answer </button>
                 </div>
 
                 <div v-if="item.type === 'tf'">
@@ -46,20 +59,19 @@
                 </div>
                 <div v-if="item.type.includes('qcm')">
                     <ul v-for="(possAnswer,index) in item.answers">
-                        <li>  {{ index }} : {{ possAnswer.answer }} </li>  <input type="textbox" v-model="possAnswer.answer" />
-                                                   <input type="button" value="Delete" @click="item.removeItemAt(index)"/>
+                        <li>  {{ index }} : {{ possAnswer.answer }} </li> : <input type="textbox" v-model="possAnswer.answer" />
+                        <input type="button" class="btn btn-outline-danger btn-sm" data-toggle="button" aria-pressed="false" value="Delete" @click="item.removeItemAt(index)"/>
                         Vrai ? <input type="checkbox" v-model="possAnswer.bool" placeholder="Correct answer ?" />
-
                     </ul>
-                    <button type="button" @click="item.addPossibleAnswer()"> Add an answer </button>
+                    <button type="button" class="btn btn-outline-success "  @click="item.addPossibleAnswer()"> Add an answer </button>
                 </div>
             </li>
         </ul>
-        <button type="button" v-on:click="quizz.addItem()"> Add item </button>
-        <button type="button" v-on:click="populateJson()" >Export to JSON </button>
-        <input v-model="jsonExport" name="content" hidden="yes" />
+        <button type="button" class="btn btn-outline-info" aria-pressed="false "  v-on:click="quizz.addItem()"> Add item </button>
+        <button type="button" class="btn btn-outline-info" data-toggle="button " aria-pressed="false" v-on:click="populateJson()" >Export to JSON </button>
+        <input v-model="jsonExport" name="content" hidden="yes" >
         <p> {{ jsonExport }}</p>
-        <input v-on:click="populateJson()" name="submit" type="submit" value="Save this quizz."/>
+        <input class="btn btn-secondary" v-on:click="populateJson()" name="submit" type="submit" value="Save this quizz."/>
     </div>
 </template>
 
@@ -71,7 +83,7 @@ import { Axios } from 'axios'
 
 export default {
     name: "EditQuizz",
-    props: ['quizzContent'],
+    props: ['quizzContent', 'private'],
     data: function () {
         return {
             quizz: new InputQuizz("Sample quizz"),
@@ -136,4 +148,6 @@ export default {
         }
     }
 }
+
+
 </script>

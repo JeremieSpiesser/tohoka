@@ -1,151 +1,163 @@
 <template>
-    <div>
-        <h1>{{ quizz.title }}</h1>
-        <button @click="toggleBGM()" type="button">Play background audio</button>
-        <ul>
-            <li v-for="item in quizz.items">
-                <img :src="item.imageUrl">
-                <p>{{item.imageUrl}}</p>
-                <h3  v-if="gameFinished" class="alert alert-primary" role="alert">
-                    {{ item.question }}<div style="text-align:right;font-style: italic;">Score : {{ item.score }}/{{ item.getNbGoodAnswers() }}</div></h3>
-                <h3  v-else>{{ item.question }} </h3>
-                <div v-if='item.type.includes("qcm")'>
-                    <h4 v-if="item.type === 'qcma' && !gameFinished">Multiple answers are possible here !</h4>
-                    <ul v-for="(possAnswer,index) in item.answers">
-                        <li>{{ index }} : {{ possAnswer.answer }}
-                            <input type="checkbox" v-model="possAnswer.userChoice">
-                            <div v-if="gameFinished">
-                                <p v-if="possAnswer.userChoice && (possAnswer.userChoice === possAnswer.bool)" style="color:green"> Bravo :) </p>
-
-                                <p v-else-if="possAnswer.userChoice && !(possAnswer.userChoice === possAnswer.bool)" style="color:red"> C'est FAUX :( </p>
-                                <p v-else-if="!possAnswer.userChoice && possAnswer.bool"> Il fallait cliquer ici, dommage :/ </p>
-
-                                <p v-if="!possAnswer.bool && !possAnswer.userChoice"></p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div v-if="item.type === 'classic'">
-                    <h4>Only one answer is possible here !</h4>
-                    <ul v-for="(possAnswer, index) in item.answers">
-                        <li>
-                            <!--input type="checkbox" v-model="possAnswer.userChoice" @click="item.disableOthers(possAnswer)"-->
-                            <input type="radio" v-model="item.userUniqueChoice" :value="possAnswer.answer">{{ possAnswer.answer }}</input>
-
-                            <div v-if="gameFinished">
-                                <!-- Si coché et ok -  nice
-                                sinon si pas coché et ok - not nice
-                                si coché et pas ok - not nice -->
-                                <p v-if="(item.userUniqueChoice === possAnswer.answer) && (possAnswer.bool)" style="color:green">Bravo :) </p>
-                                <p v-else-if="(item.userUniqueChoice === possAnswer.answer) && (!possAnswer.bool)" style="color:red"> Faux :( </p>
-                                <p v-if="(item.userUniqueChoice !== possAnswer.answer) && possAnswer.bool"> Il fallait cliquer ici, dommage :/</p>
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
-                <div v-if="item.type === 'tf'">
-                    <input type="radio" v-model="item.userTfChoice" value="true">Vrai</input>
-                    <input type="radio" v-model="item.userTfChoice" value="false">Faux</input>
-                    <div v-if="gameFinished">
-                        <p v-if="item.userTfChoice === item.isTrue" style="color:green">Bravo :)</p>
-                        <p v-if="item.userTfChoice !== item.isTrue" style="color:red">C'est Faux :(</p>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <button type="button" class="btn btn-primary" v-if="!gameFinished" @click="toggleFinished()"> Show answers </button>
-
-        <div class="jumbotron" v-if="gameFinished" style="background-color:#ffc107; color:white;">
-            <div class="container">
-                <h1 class="display-4" v-if="score === 100">Congratulations, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
-                <h1 class="display-4" v-else-if="score > 75">Almost perfect, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
-                <h1 class="display-4" v-else-if="score > 50">Quite good, you've got {{ nbpoints }}/{{ nbgoodanswers }} !</h1>
-                <h1 class="display-4" v-else-if="score > 25">You've got {{ nbpoints }}/{{ nbgoodanswers }}, you'll have to study a bit more ...</h1>
-                <h1 class="display-4" v-else>Uh-oh, you've only got {{ nbpoints }}/{{ nbgoodanswers }} ...</h1>
-                <div class="progress">
-                    <div id="achievement" class="progress-bar progress-bar-striped bg-success" role="progressbar" v-bind:style="{ width: score + '%' }" style="font-weight: bold" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ score }}%</div>
-                </div><br/>
-                <hr>
-                <div class="row justify-content-center">
-                    <button type="button" class="d-flex justify-content-center btn btn-danger" @click="toggleFinished()"> Hide answers </button>
-                </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h1>{{ content.title }}</h1>
+                <button v-if="quizzBgm" @click="toggleBGM()" type="button">
+            <span v-if="!isAudioPlaying">
+                Play background audio
+            </span>
+                    <span v-else>
+                Pause background audio
+            </span>
+                </button>
+                <button @click="loadNextQuestion()" type="button">Load question</button>
+                <form v-on:submit.prevent="sendAnswer" method="POST" action="/registerAnswer" enctype="multipart/form-data">
+                    <question></question>
+                    <button type="submit" class="btn btn-primary"> Send</button>
+                    <div id="send-feedback">{{ sendFeedback }}</div>
+                </form>
             </div>
+            <users-list :channelSocket="channelSocket" :masterId="masterId"></users-list>
         </div>
-
     </div>
 </template>
 
 <script>
 
-import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
+//import {OutputQuizz, OutputQuizzItem} from "../classes/outputQuizz";
+
+import Question from "../components/Question.vue";
+import UsersList from "./UsersList";
 
 
 export default {
-        name: "PlayQuizz",
-        props: ['quizzContent', 'quizzBgm'],
-        data: function(){
-            return {
-                quizz: new OutputQuizz(),
-                gameFinished: false,
-                nbgoodanswers: 0,
-                nbpoints: 0,
-                score: 0,
-                audio: undefined
+    name: "PlayQuizz",
+    props: ['quizzContent', 'quizzBgm', 'quizzCount', 'idInstance', 'masterId'],
+    components: {
+        UsersList,
+        Question
+    },
+    data: function(){
+        return {
+            //quizz: new OutputQuizz(),
+            gameFinished: false,
+            nbgoodanswers: 0,
+            nbpoints: 0,
+            score: 0,
+            audio: undefined,
+            isAudioPlaying: false,
+            question: "",
+            content: 0,
+            questionId: -1,
+            sendFeedback: "",
+            channelSocket: 0
+        }
+    },
+    beforeMount(){
+        this.channelSocket = window.Echo.join('playquizz.' + this.idInstance);
+
+    },
+    mounted() {
+        this.loadQuizz(this.quizzContent, this.quizzCount, this.idInstance);
+        this.initBGM(this.quizzBgm);
+        this.channelSocket.listen('NextQuestion', e => {
+            this.loadNextQuestion(e.idQuestion);
+        });
+    },
+    methods: {
+        reset() {
+            this.nbgoodanswers = 0;
+            this.nbpoints = 0;
+            this.score = 0;
+        },
+        loadQuizz(text, count, idInstance){
+            this.reset();
+            this.n = count;
+            this.idInstance = idInstance;
+            this.content = JSON.parse(this.quizzContent);
+            console.log("Corresponding json :" + text);
+        },
+        initBGM(path){
+            this.audio = new Audio(path);
+            this.audio.loop = true;
+            this.audio.volume = 0.15;
+        },
+        toggleBGM(){
+              if(!this.audio.paused) {
+                  this.isAudioPlaying = false;
+                  this.audio.pause();
+              }else{
+                  this.isAudioPlaying = true;
+                  this.audio.play();
+              }
+        },
+
+        loadNextQuestion(quest){
+            if (quest < this.n)
+            {
+                this.questionId = quest;
+                let that = this;
+
+                axios.get('/getquizzquestion/' + this.idInstance + ',' + quest)
+                    .then((response)=>{
+                        this.$children[0].loadQuestion(JSON.parse(response.data));
+                    })
+                    .catch(function (error){
+                        if (error.response){
+                            // Out of 2xx
+                            var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
+                            that.sendFeedback = errMessage;
+                            console.log(errMessage);
+                        }
+                        else if (error.request){
+                            // No response
+                            console.log("Error loading the question");
+                        }
+                        else {
+                            console.log('Unknown error');
+                            // Unknow error
+                        }
+                    });
             }
         },
-        mounted() {
-            this.loadQuizz(this.quizzContent);
-            this.initBGM(this.quizzBgm);
-        },
-        methods: {
-            reset() {
-                this.nbgoodanswers = 0;
-                this.nbpoints = 0;
-                this.score = 0;
-            },
-            loadQuizz(text){
-                this.reset();
-                console.log("Corresponding json :" + text);
-                Object.assign(this.quizz, JSON.parse(text));
-                this.quizz.items = this.quizz.items.map((item) => new OutputQuizzItem(item.question, item.answers, item.type));
-                this.quizz.items.forEach(function(item){
-                    item.userChoice = false;
-                });
-            },
-            initBGM(path){
-                this.audio = new Audio(path);
-                this.audio.loop = true;
-            },
-            toggleBGM(){
-                  if(!this.audio.paused) this.audio.pause();
-                  else this.audio.play();
-                //this.audio.play();
-            },
 
-            /*handleProgressBar(){
-                var progress = document.getElementById("achievement");
-                progress.focus();
-                progress.style.width = this.score + "%";
-                //progress.aria-valuenow = this.score;
+        sendAnswer(){
+            const formData = new FormData();
+            formData.append('answer', this.$children[0].fillJson());
+            formData.append('idInstance', this.idInstance);
+            formData.append('idQuestion', this.questionId);
 
-            },*/
-            toggleFinished() {
-                console.log(this.nbpoints);
-                this.reset();
-                document.querySelectorAll('input[type=checkbox]').forEach((checkbox) => {
-                    checkbox.disabled = !checkbox.disabled;
-                })
-                this.gameFinished = !this.gameFinished;
-                for (const item of this.quizz.items) {
-                    item.computeScore();
-                    this.nbpoints += item.score;
-                    this.nbgoodanswers += item.getNbGoodAnswers();
+            let that = this;
+
+            const res = /*await*/ axios.post('registerAnswer', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
-                this.score = Math.round((this.nbpoints / this.nbgoodanswers) * 100);
-                //this.handleProgressBar();
-            }
+            })
+            .then(function (response) {
+                // Success
+                //that.loadNextQuestion();
+                that.sendFeedback = "Answer successfully sent";
+            })
+            .catch(function (error){
+                if (error.response){
+                    // Out of 2xx
+                    var errMessage = "Error " + error.response.status + " : " + error.response.data.message;
+                    that.sendFeedback = errMessage;
+                    console.log(errMessage);
+                }
+                else if (error.request){
+                    // No response
+                    console.log("Error sending the answer");
+                }
+                else {
+                    console.log('Unknown error');
+                    // Unknow error
+                }
+            });
         }
     }
+}
 </script>

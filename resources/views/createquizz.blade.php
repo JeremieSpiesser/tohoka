@@ -7,5 +7,4 @@
         <edit-quizz></edit-quizz>
     </div>
 </form>
-
 @endsection

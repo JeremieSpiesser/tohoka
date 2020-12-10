@@ -20,6 +20,20 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
+Broadcast::channel('playquizz.{id}', function ($user, $id) {
+    if(!User::isRegistered($user)) {
+        if(!Session::has('play_name')){
+            Session::put('play_name', 'Guest: ' . Utils::randomName());
+        }
+        $user->name = Session::get('play_name');
+    }
+
+    Session::put('current_playroom', $id);
+
+    return ['id' => $user->id, 'name' => $user->name, 'state' => 'En attente ...'];
+});
+
+
 Broadcast::channel('room.{id}', function ($user, $id) {
     if(!User::isRegistered($user)) {
         if(!Session::has('chat_name')){
