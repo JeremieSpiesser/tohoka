@@ -57,16 +57,4 @@ class AnswersAPIController extends Controller
         $answer = json_encode($array);
         AnswerRepository::updateAnswer($instanceId, Session::get('generic_user')->{'id'}, $answer);
     }
-
-    public static function sendAnswers()
-    {
-        $idInstance = Session::get('current_instance');
-        $answers = DB::table('answers')
-            ->where('idInstance', $idInstance)
-            ->get();
-
-        foreach($answers as $answer){
-            broadcast(new UserStateChanged($idInstance, $answer->idPlayer, AnswerRepository::countAnswerPoints($idInstance, $answer->idPlayer));
-        }
-    }
 }
