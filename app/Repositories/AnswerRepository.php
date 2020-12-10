@@ -39,9 +39,6 @@ class AnswerRepository
             ->first()->content
             ,true)['items'];
 
-        var_dump($playerAnswers);
-        var_dump($realQuestions);
-
         $points = 0;
         $total = 0;
 
@@ -58,11 +55,16 @@ class AnswerRepository
                 case 'qcma':
                 case 'qcm':
                     for($qcm = 0; $qcm < count($realQuest['answers']); $qcm++){
-                        if(!in_array($qcm, $playerQuest, true) || $playerQuest[$qcm] === null){
+                        if(!array_key_exists($qcm, $playerQuest) || $playerQuest[$qcm] === null){
                             $playerQuest[$qcm] = false;
                         }
-                        $partialPoint += $playerQuest[$qcm] == $realQuest['answers'][$qcm]['bool'] ? 1 : -1;
-                        $total++;
+
+                        if($realQuest['answers'][$qcm]['bool']){
+                            $partialPoint += $playerQuest[$qcm] == $realQuest['answers'][$qcm]['bool'] ? 1 : 0;
+                        }else{
+                            $partialPoint += $playerQuest[$qcm] == $realQuest['answers'][$qcm]['bool'] ? 0 : -1;
+                        }
+                        $total += $realQuest['answers'][$qcm]['bool'] ? 1 : 0;
                     }
                     break;
                 case 'tf':
@@ -70,9 +72,11 @@ class AnswerRepository
                     $total++;
                     break;
             }
+
             if($partialPoint < 0){
                 $partialPoint = 0;
             }
+
             $points += $partialPoint;
         }
 
