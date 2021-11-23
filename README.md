@@ -20,9 +20,7 @@
 > Dans le Kahoot d'origine, il n'est pas utile de posséder un compte pour participer à une partie, mais s'authentifier permet d'accéder à l'interface de création d'une partie. 
 > Les quizz créés peuvent prendre diverses formes, avec des questions de type QCM, QCU, Vrai/Faux, question avec une image, ...
 
-### Adresse du backlog : https://trello.com/b/Lk7tZItG/tohoka
 
-### Adresse de la mise en production : https://tohoka.tk
 
 ## Mise en place du WebSocket
 
